@@ -24,6 +24,14 @@ class Router {
         $this->routes[HttpMethod::PUT->value][$uri] = $action;
     }
 
+    public function patch(string $uri, callable $action) {
+        $this->routes[HttpMethod::PATCH->value][$uri] = $action;
+    }
+
+    public function delete(string $uri, callable $action) {
+        $this->routes[HttpMethod::DELETE->value][$uri] = $action;
+    }
+
     public function resolve() {
         $method = $_SERVER["REQUEST_METHOD"];
         $uri = $_SERVER["REQUEST_URI"];

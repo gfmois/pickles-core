@@ -3,11 +3,16 @@
 require_once '../vendor/autoload.php';
 
 use Pickles\HttpNotFoundException;
+use Pickles\Route;
 use Pickles\Router;
 
 $router = new Router();
 
 $router->get("/test", function() {
+    return "OK";
+});
+
+$router->post("/test", function() {
     return "OK";
 });
 
@@ -28,8 +33,12 @@ try {
     $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER["REQUEST_URI"];
 
-    $action = $router->resolve($uri, $method);
+    $route = $router->resolve($uri, $method);
+    $action = $route->getAction();
     print($action());
+
+    // $route = new Route("/test/{test}/user/{user}", fn() => "test");
+    // var_dump($route->parseParameters("/test/1/user/gfmois"));
 } catch (HttpNotFoundException $e) {
     print("Not found");
     http_response_code(404);

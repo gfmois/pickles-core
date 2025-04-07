@@ -8,11 +8,21 @@
             "Pickles\\": "src/Pickles"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Pickles\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "tests": "phpunit --color=always --testdox tests/"
+    },
     "authors": [
         {
             "name": "Moisés Guerola",
             "email": "daw.moisesguerola@gmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^12.1"
+    }
 }

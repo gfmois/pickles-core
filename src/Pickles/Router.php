@@ -1,7 +1,6 @@
 <?php
 
-require "./HttpMethod.php";
-require "./HttpNotFoundException.php";
+namespace Pickles;
 
 class Router {
     protected array $routes = [];

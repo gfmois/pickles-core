@@ -1,0 +1,18 @@
+{
+    "name": "gfmois/pickles-framework",
+    "description": "Simple PHP Framework inspired by Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Pickles\\": "src/Pickles"
+        }
+    },
+    "authors": [
+        {
+            "name": "Moisés Guerola",
+            "email": "daw.moisesguerola@gmail.com"
+        }
+    ],
+    "require": {}
+}

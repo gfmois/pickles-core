@@ -1,6 +1,9 @@
 <?php
 
-require "./Router.php";
+require_once '../vendor/autoload.php';
+
+use Pickles\HttpNotFoundException;
+use Pickles\Router;
 
 $router = new Router();
 

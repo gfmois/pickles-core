@@ -21,19 +21,19 @@ class Router {
         $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
 
-    public function post(string $uri, callable $action) {
+    public function post(string $uri, Closure $action) {
         $this->registerRoute(HttpMethod::POST, $uri, $action);
     }
 
-    public function put(string $uri, callable $action) {
+    public function put(string $uri, Closure $action) {
         $this->registerRoute(HttpMethod::PUT, $uri, $action);
     }
 
-    public function patch(string $uri, callable $action) {
+    public function patch(string $uri, Closure $action) {
         $this->registerRoute(HttpMethod::PATCH, $uri, $action);
     }
 
-    public function delete(string $uri, callable $action) {
+    public function delete(string $uri, Closure $action) {
         $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
 

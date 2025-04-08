@@ -6,8 +6,17 @@ use PHPUnit\Framework\TestCase;
 use Pickles\HttpMethod;
 use Pickles\Request;
 use Pickles\Router;
+use Pickles\Server;
 
 class RouterTest extends TestCase {
+    private function createMockRequest(string $uri, HttpMethod $method): Request {
+        $mock = $this->getMockBuilder(Server::class)->getMock();
+        $mock->method("requestUri")->willReturn($uri);
+        $mock->method("requestMethod")->willReturn($method);
+
+        return new Request($mock);
+    }
+
     public function test_resolve_basic_route_with_callback_action() {
         $uri = "/test";
         $action = fn () => "test";
@@ -15,7 +24,7 @@ class RouterTest extends TestCase {
 
         $router->get($uri, $action);
 
-        $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+        $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
         $this->assertEquals($action, $route->getAction());
     }
 
@@ -34,7 +43,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as $uri => $action) {
-            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+            $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
             $this->assertEquals($action, $route->getAction());
         }
     }
@@ -61,7 +70,7 @@ class RouterTest extends TestCase {
         }
 
         foreach($routes as [$method, $uri, $action]) {
-            $route = $router->resolve(new Request(new MockServer($uri, $method)));
+            $route = $router->resolve($this->createMockRequest($uri, $method));
             $this->assertEquals($action, $route->getAction());
         }
     }

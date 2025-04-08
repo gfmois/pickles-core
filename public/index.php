@@ -3,6 +3,7 @@
 require_once '../vendor/autoload.php';
 
 use Pickles\HttpNotFoundException;
+use Pickles\PhpNativeServer;
 use Pickles\Request;
 use Pickles\Route;
 use Pickles\Router;
@@ -35,7 +36,7 @@ try {
     $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER["REQUEST_URI"];
 
-    $route = $router->resolve(new Request(new Server()));
+    $route = $router->resolve(new Request(new PhpNativeServer()));
     $action = $route->getAction();
     print($action());
 

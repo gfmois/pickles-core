@@ -4,6 +4,7 @@ namespace Pickles\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Pickles\HttpMethod;
+use Pickles\Request;
 use Pickles\Router;
 
 class RouterTest extends TestCase {
@@ -14,7 +15,7 @@ class RouterTest extends TestCase {
 
         $router->get($uri, $action);
 
-        $route = $router->resolve($uri, HttpMethod::GET->value);
+        $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
         $this->assertEquals($action, $route->getAction());
     }
 
@@ -33,7 +34,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as $uri => $action) {
-            $route = $router->resolve($uri, HttpMethod::GET->value);
+            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
             $this->assertEquals($action, $route->getAction());
         }
     }
@@ -60,7 +61,7 @@ class RouterTest extends TestCase {
         }
 
         foreach($routes as [$method, $uri, $action]) {
-            $route = $router->resolve($uri, $method->value);
+            $route = $router->resolve(new Request(new MockServer($uri, $method)));
             $this->assertEquals($action, $route->getAction());
         }
     }

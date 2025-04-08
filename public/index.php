@@ -3,8 +3,10 @@
 require_once '../vendor/autoload.php';
 
 use Pickles\HttpNotFoundException;
+use Pickles\Request;
 use Pickles\Route;
 use Pickles\Router;
+use Pickles\Server;
 
 $router = new Router();
 
@@ -33,7 +35,7 @@ try {
     $method = $_SERVER["REQUEST_METHOD"];
     $uri = $_SERVER["REQUEST_URI"];
 
-    $route = $router->resolve($uri, $method);
+    $route = $router->resolve(new Request(new Server()));
     $action = $route->getAction();
     print($action());
 

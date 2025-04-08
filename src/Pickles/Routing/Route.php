@@ -1,6 +1,6 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Routing;
 
 use Closure;
 

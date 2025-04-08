@@ -1,12 +1,12 @@
 <?php
 
-namespace Pickles\Tests;
+namespace Pickles\Tests\Routing;
 
 use PHPUnit\Framework\TestCase;
-use Pickles\HttpMethod;
-use Pickles\Request;
-use Pickles\Router;
-use Pickles\Server;
+use Pickles\Http\HttpMethod;
+use Pickles\Http\Request;
+use Pickles\Routing\Router;
+use Pickles\Server\Server;
 
 class RouterTest extends TestCase {
     private function createMockRequest(string $uri, HttpMethod $method): Request {

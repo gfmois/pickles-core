@@ -1,6 +1,8 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Server;
+
+use Pickles\Http\HttpMethod;
 
 class PhpNativeServer implements Server {
     public function requestUri(): string {

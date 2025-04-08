@@ -4,7 +4,7 @@ namespace Pickles\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Pickles\Route;
+use Pickles\Routing\Route;
 
 class RouteTest extends TestCase {
     public static function getRoutesWithNoParameters(): array {

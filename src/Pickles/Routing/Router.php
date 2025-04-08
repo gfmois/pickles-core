@@ -1,8 +1,12 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Routing;
 
 use Closure;
+use Pickles\Http\HttpMethod;
+use Pickles\Http\HttpNotFoundException;
+use Pickles\Http\Request;
+use Pickles\Routing\Route;
 
 class Router {
     protected array $routes = [];

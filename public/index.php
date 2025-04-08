@@ -1,13 +1,11 @@
 <?php
 
-require_once '../vendor/autoload.php';
+use Pickles\Http\HttpNotFoundException;
+use Pickles\Http\Request;
+use Pickles\Routing\Router;
+use Pickles\Server\PhpNativeServer;
 
-use Pickles\HttpNotFoundException;
-use Pickles\PhpNativeServer;
-use Pickles\Request;
-use Pickles\Route;
-use Pickles\Router;
-use Pickles\Server;
+require_once '../vendor/autoload.php';
 
 $router = new Router();
 

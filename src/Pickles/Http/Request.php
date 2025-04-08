@@ -1,6 +1,8 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Http;
+
+use Pickles\Server\Server;
 
 class Request {
     protected string $uri;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Server;
+
+use Pickles\Http\HttpMethod;
 
 interface Server {
     public function requestUri(): string;

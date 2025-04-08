@@ -1,6 +1,6 @@
 <?php
 
-namespace Pickles;
+namespace Pickles\Http;
 
 enum HttpMethod: string {
     case GET = "GET";

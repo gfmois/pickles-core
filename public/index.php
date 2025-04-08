@@ -12,14 +12,15 @@ require_once '../vendor/autoload.php';
 $router = new Router();
 
 $router->get("/test", function(Request $request) {
-    $response = new Response();
-    $response->setHeader(HttpHeader::CONTENT_TYPE, "application/json");
-    $response->setContent(json_encode(["message" => "GET OK"]));
-    return $response;
+    return Response::text("GET OK");
 });
 
 $router->post("/test", function(Request $request) {
-    return "OK";
+    return Response::text("POST OK");
+});
+
+$router->get("/redirect", function(Request $request) {
+    return Response::redirect("/test");
 });
 
 $router->put('/test', function(Request $request) {
@@ -45,11 +46,5 @@ try {
     // $route = new Route("/test/{test}/user/{user}", fn() => "test");
     // var_dump($route->parseParameters("/test/1/user/gfmois"));
 } catch (HttpNotFoundException $e) {
-    $response = new Response();
-
-    $response->setStatus(404);
-    $response->setContent("Not Found");
-    $response->setHeader(HttpHeader::CONTENT_TYPE, "text/plain");
-
-    $server->sendResponse($response);
+    $server->sendResponse(Response::text("Not Found")->setStatus(404));
 }

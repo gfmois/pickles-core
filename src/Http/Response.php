@@ -4,12 +4,13 @@ namespace Pickles\Http;
 
 /**
  * Class Response
- * 
+ *
  * Represents an HTTP response to be sent to the client.
  * Allows setting status code, headers, and body content.
  * Includes helper methods for common response types (JSON, text, redirect).
  */
-class Response {
+class Response
+{
     /**
      * The HTTP status code of the response (default: 200 OK).
      *
@@ -37,17 +38,19 @@ class Response {
      *
      * @return int
      */
-    public function getStatus(): int {
+    public function getStatus(): int
+    {
         return $this->status;
     }
 
-     /**
-     * Set the HTTP status code.
-     *
-     * @param int $status
-     * @return $this
-     */
-    public function setStatus(int $status): self {
+    /**
+    * Set the HTTP status code.
+    *
+    * @param int $status
+    * @return $this
+    */
+    public function setStatus(int $status): self
+    {
         $this->status = $status;
         return $this;
     }
@@ -57,7 +60,8 @@ class Response {
      *
      * @return array<string, string>
      */
-    public function getHedaers(): array {
+    public function getHedaers(): array
+    {
         return $this->headers;
     }
 
@@ -68,7 +72,8 @@ class Response {
      * @param string $value The header value.
      * @return $this
      */
-    public function setHeader(HttpHeader $header, string $value): self {
+    public function setHeader(HttpHeader $header, string $value): self
+    {
         $this->headers[strtolower($header->value)] = $value;
         return $this;
     }
@@ -79,7 +84,8 @@ class Response {
      * @param HttpHeader $header The header to remove.
      * @return void
      */
-    public function removeHeader(HttpHeader $header): void {
+    public function removeHeader(HttpHeader $header): void
+    {
         unset($this->headers[strtolower($header->value)]);
     }
 
@@ -89,7 +95,8 @@ class Response {
      * @param array<string, string> $headers
      * @return $this
      */
-    public function setHeaders(array $headers): self {
+    public function setHeaders(array $headers): self
+    {
         $this->headers = $headers;
         return $this;
     }
@@ -99,7 +106,8 @@ class Response {
      *
      * @return string|null
      */
-    public function getContent(): ?string {
+    public function getContent(): ?string
+    {
         return $this->content;
     }
 
@@ -109,7 +117,8 @@ class Response {
      * @param string|null $content
      * @return $this
      */
-    public function setContent(?string $content): self {
+    public function setContent(?string $content): self
+    {
         $this->content = $content;
         return $this;
     }
@@ -120,7 +129,8 @@ class Response {
      * @param string $content MIME type (e.g., application/json)
      * @return $this
      */
-    public function setContentType(string $content): self {
+    public function setContentType(string $content): self
+    {
         $this->setHeader(HttpHeader::CONTENT_TYPE, $content);
         return $this;
     }
@@ -132,7 +142,8 @@ class Response {
      *
      * @return void
      */
-    public function prepare() {
+    public function prepare()
+    {
         $content = $this->getContent();
         if (is_null($content)) {
             $this->removeHeader(HttpHeader::CONTENT_TYPE);
@@ -148,7 +159,8 @@ class Response {
      * @param array $data The data to encode as JSON.
      * @return self
      */
-    public static function json(array $data): self {
+    public static function json(array $data): self
+    {
         return (new self())
             ->setContentType("application/json")
             ->setContent(json_encode($data));
@@ -160,7 +172,8 @@ class Response {
      * @param string $text The text content.
      * @return self
      */
-    public static function text(string $text): self {
+    public static function text(string $text): self
+    {
         return (new self())
             ->setContentType("text/plain")
             ->setContent($text);
@@ -172,7 +185,8 @@ class Response {
      * @param string $uri The target URI to redirect to.
      * @return self
      */
-    public static function redirect(string $uri): self {
+    public static function redirect(string $uri): self
+    {
         return (new self())
             ->setStatus(302)
             ->setHeader(HttpHeader::LOCATION, $uri);

@@ -4,14 +4,14 @@ namespace Pickles\Http;
 
 use Pickles\Server\Server;
 
-
 /**
  * Class Request
  *
  * Encapsulates the HTTP request data retrieved from the Server implementation.
  * Provides access to URI, method, POST data, and query parameters.
  */
-class Request {
+class Request
+{
     /**
      * The request URI path.
      *
@@ -47,7 +47,8 @@ class Request {
      *
      * @param Server $server The server implementation providing request information.
      */
-    public function __construct(Server $server) {
+    public function __construct(Server $server)
+    {
         $this->uri = $server->requestUri();
         $this->method = $server->requestMethod();
         $this->data = $server->postData();
@@ -59,7 +60,8 @@ class Request {
      *
      * @return string
      */
-    public function getUri(): string {
+    public function getUri(): string
+    {
         return $this->uri;
     }
 
@@ -68,7 +70,26 @@ class Request {
      *
      * @return HttpMethod
      */
-    public function getMethod(): HttpMethod {
+    public function getMethod(): HttpMethod
+    {
         return $this->method;
+    }
+
+    /**
+     * Get POST data
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get all query parameters
+     * @return string[]
+     */
+    public function getQuery(): array
+    {
+        return $this->queryParams;
     }
 }

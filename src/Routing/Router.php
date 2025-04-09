@@ -10,12 +10,12 @@ use Pickles\Routing\Route;
 
 /**
  * Class Router
- * 
+ *
  * A simple HTTP router that maps URIs and HTTP methods to handlers.
  * Supports typical RESTful HTTP methods and route resolution.
  */
-class Router {
-
+class Router
+{
     /**
      * The registered HTTP routes, organized by HTTP method.
      *
@@ -29,7 +29,8 @@ class Router {
      *
      * Initializes the routes array for each available HTTP method.
      */
-    public function __construct() {
+    public function __construct()
+    {
         foreach (HttpMethod::cases() as $method) {
             $this->routes[$method->value] = [];
         }
@@ -43,7 +44,8 @@ class Router {
      * @param Closure $action The handler to be executed for this route
      * @return void
      */
-    protected function registerRoute(HttpMethod $method, string $uri, Closure $action) {
+    protected function registerRoute(HttpMethod $method, string $uri, Closure $action)
+    {
         $this->routes[$method->value][] = new Route($uri, $action);
     }
 
@@ -54,7 +56,8 @@ class Router {
      * @param Closure $action
      * @return void
      */
-    public function get(string $uri, Closure $action) {
+    public function get(string $uri, Closure $action)
+    {
         $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
 
@@ -65,7 +68,8 @@ class Router {
      * @param Closure $action
      * @return void
      */
-    public function post(string $uri, Closure $action) {
+    public function post(string $uri, Closure $action)
+    {
         $this->registerRoute(HttpMethod::POST, $uri, $action);
     }
 
@@ -76,7 +80,8 @@ class Router {
      * @param Closure $action
      * @return void
      */
-    public function put(string $uri, Closure $action) {
+    public function put(string $uri, Closure $action)
+    {
         $this->registerRoute(HttpMethod::PUT, $uri, $action);
     }
 
@@ -87,7 +92,8 @@ class Router {
      * @param Closure $action
      * @return void
      */
-    public function patch(string $uri, Closure $action) {
+    public function patch(string $uri, Closure $action)
+    {
         $this->registerRoute(HttpMethod::PATCH, $uri, $action);
     }
 
@@ -98,7 +104,8 @@ class Router {
      * @param Closure $action
      * @return void
      */
-    public function delete(string $uri, Closure $action) {
+    public function delete(string $uri, Closure $action)
+    {
         $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
 
@@ -110,8 +117,9 @@ class Router {
      *
      * @throws HttpNotFoundException If no matching route is found for the request.
      */
-    public function resolve(Request $request): Route {
-        foreach($this->routes[$request->getMethod()->value] as $route) {
+    public function resolve(Request $request): Route
+    {
+        foreach ($this->routes[$request->getMethod()->value] as $route) {
             if ($route->matches($request->getUri())) {
                 return $route;
             }

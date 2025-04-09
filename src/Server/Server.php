@@ -13,7 +13,8 @@ use Pickles\Http\Response;
  *
  * This interface provides methods to access HTTP request information and send a response.
  */
-interface Server {
+interface Server
+{
     /**
      * Retrieves the request URI (e.g., "/api/users?active=true").
      *

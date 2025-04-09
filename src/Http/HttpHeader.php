@@ -8,7 +8,8 @@ namespace Pickles\Http;
  * Represents a subset of standard HTTP headers used in HTTP requests and responses.
  * Each case maps to the actual header name as a string.
  */
-enum HttpHeader: string {
+enum HttpHeader: string
+{
     /**
      * The size of the request or response body, in bytes.
      */

@@ -9,6 +9,6 @@ use Exception;
  *
  * Exception thrown when a requested route is not found.
  */
-class HttpNotFoundException extends Exception {
-    
+class HttpNotFoundException extends Exception
+{
 }

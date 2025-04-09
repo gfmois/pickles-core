@@ -6,11 +6,12 @@ use Closure;
 
 /**
  * Class Route
- * 
+ *
  * Represents a route in the HTTP router. Stores the URI pattern and the action (handler) to execute.
  * Supports parametrized routes using `{param}` syntax and extracts parameters from matching URIs.
  */
-class Route {
+class Route
+{
     /**
      * The URI pattern defined for the route (e.g., /users/{id}).
      *
@@ -45,7 +46,8 @@ class Route {
      * @param string $uri The route URI definition, possibly with parameters.
      * @param Closure $action The handler to be executed for this route.
      */
-    public function __construct(string $uri, Closure $action) {
+    public function __construct(string $uri, Closure $action)
+    {
         $this->uri = $uri;
         $this->action = $action;
         $this->regex = preg_replace("/\{([a-zA-Z]+)\}/", "([a-zA-Z0-9]+)", $uri);
@@ -58,7 +60,8 @@ class Route {
      * Get the URI definition for this route.
      * @return string
      */
-    public function getUri() {
+    public function getUri()
+    {
         return $this->uri;
     }
 
@@ -67,7 +70,8 @@ class Route {
      *
      * @return Closure
      */
-    public function getAction() {
+    public function getAction()
+    {
         return $this->action;
     }
 
@@ -77,7 +81,8 @@ class Route {
      * @param string $uri The request URI.
      * @return bool True if it matches; false otherwise.
      */
-    public function matches(string $uri): bool {
+    public function matches(string $uri): bool
+    {
         return preg_match("#^$this->regex/?$#", $uri);
     }
 
@@ -86,7 +91,8 @@ class Route {
      *
      * @return bool True if parameters exist; false otherwise.
      */
-    public function hasParameters(): bool {
+    public function hasParameters(): bool
+    {
         return count($this->parameters) > 0;
     }
 
@@ -96,7 +102,8 @@ class Route {
      * @param string $uri The URI to extract values from.
      * @return array<string, string> Associative array of parameter names and their values.
      */
-    public function parseParameters(string $uri): array {
+    public function parseParameters(string $uri): array
+    {
         preg_match("#^$this->regex$#", $uri, $arguments);
         return array_combine($this->parameters, array_slice($arguments, 1));
     }

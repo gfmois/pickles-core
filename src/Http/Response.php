@@ -60,9 +60,20 @@ class Response
      *
      * @return array<string, string>
      */
-    public function getHedaers(): array
+    public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    /**
+     * Get specific header;
+     *
+     * @param string $header
+     * @return string|null
+     */
+    public function getHeader(string $header): string|null
+    {
+        return $this->headers[strtolower($header)] ?? null;
     }
 
     /**
@@ -129,8 +140,7 @@ class Response
      * @param string $content MIME type (e.g., application/json)
      * @return $this
      */
-    public function setContentType(string $content): self
-    {
+    public function setContentType(string $content): self {
         $this->setHeader(HttpHeader::CONTENT_TYPE, $content);
         return $this;
     }

@@ -2,7 +2,8 @@
 
 namespace Pickles\Http;
 
-use Pickles\Server\Server;
+use InvalidArgumentException;
+use Pickles\Routing\Route;
 
 /**
  * Class Request
@@ -18,6 +19,13 @@ class Request
      * @var string
      */
     protected string $uri;
+
+    /**
+     * Route match by URI
+     * 
+     * @var Route
+     */
+    protected Route $route;
 
     /**
      * The HTTP method of the request.
@@ -41,21 +49,6 @@ class Request
     protected array $queryParams;
 
     /**
-     * Constructor.
-     *
-     * Initializes the request data by extracting it from the Server.
-     *
-     * @param Server $server The server implementation providing request information.
-     */
-    public function __construct(Server $server)
-    {
-        $this->uri = $server->requestUri();
-        $this->method = $server->requestMethod();
-        $this->data = $server->postData();
-        $this->queryParams = $server->queryParams();
-    }
-
-    /**
      * Get the request URI path.
      *
      * @return string
@@ -63,6 +56,18 @@ class Request
     public function getUri(): string
     {
         return $this->uri;
+    }
+
+    /**
+     * Set request URI.
+     *
+     * @param  string  $uri  The request URI path.
+     * @return self
+     */
+    public function setUri(string $uri): self
+    {
+        $this->uri = $uri;
+        return $this;
     }
 
     /**
@@ -76,20 +81,124 @@ class Request
     }
 
     /**
-     * Get POST data
-     * @return array
+     * Set the HTTP method of the request.
+     *
+     * @param  HttpMethod  $method  The HTTP method of the request.
+     * @return  self
      */
-    public function getData(): array
+    public function setMethod(HttpMethod $method): self
     {
-        return $this->data;
+        $this->method = $method;
+        return $this;
+    }
+
+    /**
+     * Retrieves a specific item from the POST data or returns all POST data.
+     *
+     * If no key is provided, the entire POST data array will be returned.
+     * If a key is provided but does not exist in the data, `null` will be returned.
+     *
+     * @param string|null $key The data key to retrieve, or null to get all data.
+     * @return array|string|null The entire data array, a specific value, or null if the key is not set.
+     *
+     * @throws InvalidArgumentException If the provided key is not a string.
+     */
+    public function getData(?string $key = null)
+    {
+        if ($key === null) {
+            return $this->data;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('POST data key must be a string or null.');
+        }
+
+        return $this->data[$key] ?? null;
+    }
+
+    /**
+     * Set POST data
+     *
+     * @param  array<string, mixed>
+     * @return  self
+     */
+    public function setData(array $data): self
+    {
+        $this->data = $data;
+        return $this;
     }
 
     /**
      * Get all query parameters
-     * @return string[]
+     *
+     * @var string|null $key
+     * @return string|string[]|null
+     * @throws InvalidArgumentException when `$key` is not null or string
      */
-    public function getQuery(): array
+    public function getQueryParams(?string $key = null): string|array|null
     {
-        return $this->queryParams;
+        if ($key === null) {
+            return $this->queryParams;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('Query parameter key must be a string or null.');
+        }
+
+        return $this->queryParams[$key] ?? null;
+    }
+
+    /**
+     * Set query parameters.
+     *
+     * @param  array<string, string> $queryParams  
+     * @return  self
+     */
+    public function setQueryParams(array $queryParams): self
+    {
+        $this->queryParams = $queryParams;
+        return $this;
+    }
+
+    /**
+     * Get route match by URI of this request.
+     *
+     * @return  Route
+     */
+    public function getRoute(): Route
+    {
+        return $this->route;
+    }
+
+    /**
+     * Set route for this request.
+     *
+     * @param  Route  $route
+     * @return  self
+     */
+    public function setRoute(Route $route): self
+    {
+        $this->route = $route;
+        return $this;
+    }
+
+    /**
+     * Get all route params
+     * 
+     * @param string|null $key
+     * @throws InvalidArgumentException when `$key` is not a string
+     * @return string|string[]|null
+     */
+    public function getRouteParameters(?string $key = null) {
+        $routeParams = $this->route->parseParameters($this->uri);
+        if ($key === null) {
+            return $routeParams;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('Route parameter key must be a string or null.');
+        }
+
+        return $routeParams[$key] ?? null;
     }
 }

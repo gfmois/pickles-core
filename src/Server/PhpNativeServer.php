@@ -4,6 +4,7 @@ namespace Pickles\Server;
 
 use Pickles\Http\HttpHeader;
 use Pickles\Http\HttpMethod;
+use Pickles\Http\Request;
 use Pickles\Http\Response;
 
 /**
@@ -15,38 +16,16 @@ use Pickles\Http\Response;
  */
 class PhpNativeServer implements Server
 {
-    /**
-     * Get the current request URI path.
-     *
-     * @return string The request URI path (excluding query string).
-     */
-    public function requestUri(): string
-    {
-        return parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    }
-
+    
     /**
      * @inheritDoc
      */
-    public function requestMethod(): HttpMethod
-    {
-        return HttpMethod::from($_SERVER["REQUEST_METHOD"]);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function postData(): array
-    {
-        return $_POST;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function queryParams(): array
-    {
-        return $_GET;
+    public function getRequest(): Request {
+        return (new Request())
+            ->setUri(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH))
+            ->setMethod(HttpMethod::from($_SERVER["REQUEST_METHOD"]))
+            ->setData($_POST)
+            ->setQueryParams($_GET);
     }
 
     /**

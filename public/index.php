@@ -11,12 +11,12 @@ require_once '../vendor/autoload.php';
 
 $router = new Router();
 
-$router->get("/test", function(Request $request) {
-    return Response::text("GET OK");
+$router->get("/test/{param}", function(Request $request) {
+    return Response::json(["result" => $request->getRouteParameters()]);
 });
 
 $router->post("/test", function(Request $request) {
-    return Response::text("POST OK");
+    return Response::json(["result" => $request->getData()]);
 });
 
 $router->get("/redirect", function(Request $request) {
@@ -38,13 +38,12 @@ $router->delete('/test', function(Request $request) {
 
 $server = new PhpNativeServer();
 try {
-    $request = new Request($server);
+    $request = $server->getRequest();
     $route = $router->resolve($request);
+    $request->setRoute($route);
     $action = $route->getAction();
     $response = $action($request);
     $server->sendResponse($response);
-    // $route = new Route("/test/{test}/user/{user}", fn() => "test");
-    // var_dump($route->parseParameters("/test/1/user/gfmois"));
 } catch (HttpNotFoundException $e) {
     $server->sendResponse(Response::text("Not Found")->setStatus(404));
 }

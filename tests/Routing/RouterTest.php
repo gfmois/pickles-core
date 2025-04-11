@@ -10,7 +10,8 @@ use Pickles\Server\Server;
 
 class RouterTest extends TestCase
 {
-    private function createMockRequest(string $uri, HttpMethod $method): Request {
+    private function createMockRequest(string $uri, HttpMethod $method): Request
+    {
         return (new Request())
             ->setUri($uri)
             ->setMethod($method);

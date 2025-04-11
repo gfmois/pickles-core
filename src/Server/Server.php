@@ -14,10 +14,11 @@ use Pickles\Http\Response;
  *
  * This interface provides methods to access HTTP request information and send a response.
  */
-interface Server {
+interface Server
+{
     /**
      * Get request sent by the client.
-     * 
+     *
      * @return Request
      */
     public function getRequest(): Request;

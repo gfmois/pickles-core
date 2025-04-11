@@ -22,7 +22,7 @@ class Request
 
     /**
      * Route match by URI
-     * 
+     *
      * @var Route
      */
     protected Route $route;
@@ -151,7 +151,7 @@ class Request
     /**
      * Set query parameters.
      *
-     * @param  array<string, string> $queryParams  
+     * @param  array<string, string> $queryParams
      * @return  self
      */
     public function setQueryParams(array $queryParams): self
@@ -184,12 +184,13 @@ class Request
 
     /**
      * Get all route params
-     * 
+     *
      * @param string|null $key
      * @throws InvalidArgumentException when `$key` is not a string
      * @return string|string[]|null
      */
-    public function getRouteParameters(?string $key = null) {
+    public function getRouteParameters(?string $key = null)
+    {
         $routeParams = $this->route->parseParameters($this->uri);
         if ($key === null) {
             return $routeParams;

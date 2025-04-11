@@ -140,7 +140,8 @@ class Response
      * @param string $content MIME type (e.g., application/json)
      * @return $this
      */
-    public function setContentType(string $content): self {
+    public function setContentType(string $content): self
+    {
         $this->setHeader(HttpHeader::CONTENT_TYPE, $content);
         return $this;
     }

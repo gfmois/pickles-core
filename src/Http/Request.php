@@ -49,6 +49,12 @@ class Request
     protected array $queryParams;
 
     /**
+     * Request headers.
+     * @var array<string, string>
+     */
+    protected array $headers = [];
+
+    /**
      * Get the request URI path.
      *
      * @return string
@@ -105,7 +111,7 @@ class Request
      */
     public function getData(?string $key = null)
     {
-        if ($key === null) {
+        if (is_null($key)) {
             return $this->data;
         }
 
@@ -137,7 +143,7 @@ class Request
      */
     public function getQueryParams(?string $key = null): string|array|null
     {
-        if ($key === null) {
+        if (is_null($key)) {
             return $this->queryParams;
         }
 
@@ -192,7 +198,7 @@ class Request
     public function getRouteParameters(?string $key = null)
     {
         $routeParams = $this->route->parseParameters($this->uri);
-        if ($key === null) {
+        if (is_null($key)) {
             return $routeParams;
         }
 
@@ -201,5 +207,38 @@ class Request
         }
 
         return $routeParams[$key] ?? null;
+    }
+
+    /**
+     * Get all request headers or a specific header.
+     *
+     * @param string|null $key
+     * @return  array<string,
+     */ 
+    public function getHeaders(?string $key = null): string|array|null
+    {
+        if (is_null($key)) {
+            return $this->headers;
+        }
+
+        if (!is_string($key)) {
+            throw new InvalidArgumentException('Route headers key must be a string or null.');
+        }
+
+        return $this->headers[strtolower($key)] ?? null;
+    }
+
+    /**
+     * Set Request headers
+     *
+     * @param array<string, string> $headers
+     * @return self
+     */ 
+    public function setHeaders(array $headers): self{
+        foreach ($headers as $key => $value) {
+            $this->headers[strtolower($key)] = $value;
+        }
+        
+        return $this;
     }
 }

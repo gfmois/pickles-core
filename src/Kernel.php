@@ -14,7 +14,7 @@ use Pickles\Server\Server;
  * Class Kernel
  *
  * The Kernel class is the core of the Pickles framework. It is responsible for
- * bootstrapping the application, handling HTTP requests, resolving routes, 
+ * bootstrapping the application, handling HTTP requests, resolving routes,
  * executing actions, and sending HTTP responses.
  *
  * @package Pickles
@@ -26,13 +26,13 @@ class Kernel
      *
      * @var Router
      */
-    
+
     /**
      * The request instance representing the current HTTP request.
      *
      * @var Request
      */
-    
+
     /**
      * The server instance providing server-related utilities and information.
      *
@@ -61,7 +61,37 @@ class Kernel
     }
 
     /**
-     * Executes the main application logic by resolving the route, 
+     * Get the server instance providing server-related utilities and information.
+     *
+     * @return Router
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * Get the value of request
+     *
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the value of server
+     *
+     * @return Server
+     */
+    public function getServer()
+    {
+        return $this->server;
+    }
+
+    /**
+     * Executes the main application logic by resolving the route,
      * invoking the corresponding action, and sending the response.
      *
      * @return void
@@ -69,10 +99,7 @@ class Kernel
     public function run()
     {
         try {
-            $route = $this->router->resolve($this->request);
-            $this->request->setRoute($route);
-            $action = $route->getAction();
-            $response = $action($this->request);
+            $response = $this->getRouter()->resolve($this->request);
             $this->server->sendResponse($response);
         } catch (HttpNotFoundException $e) {
             $response = Response::text("Not Found")->setStatus(404);

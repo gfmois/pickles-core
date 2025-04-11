@@ -3,6 +3,10 @@
 namespace Pickles\Routing;
 
 use Closure;
+use Http\Middleware;
+use Pickles\Container\Container;
+use Pickles\Kernel;
+use RuntimeException;
 
 /**
  * Class Route
@@ -39,6 +43,12 @@ class Route
      * @var string[]
      */
     protected array $parameters;
+
+    /**
+     * HTTP middlewares associated with this route.
+     * @var Middleware[]
+     */
+    protected array $middlewares = [];
 
     /**
      * Constructor.
@@ -106,5 +116,51 @@ class Route
     {
         preg_match("#^$this->regex$#", $uri, $arguments);
         return array_combine($this->parameters, array_slice($arguments, 1));
+    }
+
+    public static function GET(string $uri, Closure $action): self
+    {
+        $kernel = Container::resolve(Kernel::class);
+        if (!$kernel instanceof Kernel) {
+            throw new RuntimeException('Kernel instance not found in the container.');
+        }
+
+        return $kernel->getRouter()->get($uri, $action);
+    }
+
+    /**
+     * Get HTTP middlewares associated with this route.
+     *
+     * @return Middleware[]
+     */ 
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
+    }
+
+    /**
+     * Set HTTP middlewares for this route.
+     * 
+     * @param string[] $middlewares Array of middleware class names.
+     * @throws \RuntimeException If any of the provided classes are not valid middleware.
+     * @return Route
+     */
+    public function setMiddlewares(array $middlewares): self {
+        $not_middlewares = array_filter($middlewares, fn($middleware) => !is_subclass_of($middleware, Middleware::class));
+        if (count($not_middlewares) > 0) {
+            throw new RuntimeException('Not all middlewares are valid:' . implode(', ', $not_middlewares));
+        }
+
+        $this->middlewares = array_map(fn($middleware) => new $middleware(), $middlewares);
+        return $this;
+    }
+
+    /**
+     * Checks if middlewares has been added to the current Route.
+     *
+     * @return bool Returns true if there are middlewares associated with the route, false otherwise.
+     */
+    public function hasMiddlewares(): bool {
+        return count($this->middlewares) > 0;
     }
 }

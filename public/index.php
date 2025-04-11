@@ -1,12 +1,8 @@
 <?php
 
-use Pickles\Http\HttpHeader;
-use Pickles\Http\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Kernel;
-use Pickles\Routing\Router;
-use Pickles\Server\PhpNativeServer;
 
 require_once '../vendor/autoload.php';
 

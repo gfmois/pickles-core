@@ -4,7 +4,7 @@ namespace Pickles\Container;
 
 /**
  * Class Container
- * 
+ *
  * A simple dependency injection container that manages singleton instances of classes.
  */
 class Container

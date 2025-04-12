@@ -214,7 +214,7 @@ class Request
      *
      * @param string|null $key
      * @return  array<string,
-     */ 
+     */
     public function getHeaders(?string $key = null): string|array|null
     {
         if (is_null($key)) {
@@ -233,12 +233,13 @@ class Request
      *
      * @param array<string, string> $headers
      * @return self
-     */ 
-    public function setHeaders(array $headers): self{
+     */
+    public function setHeaders(array $headers): self
+    {
         foreach ($headers as $key => $value) {
             $this->headers[strtolower($key)] = $value;
         }
-        
+
         return $this;
     }
 }

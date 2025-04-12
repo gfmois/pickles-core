@@ -79,13 +79,14 @@ class Response
     /**
      * Set a specific header with a value.
      *
-     * @param HttpHeader $header The header name (enum).
+     * @param HttpHeader|string $header The header name (enum or string).
      * @param string $value The header value.
      * @return $this
      */
-    public function setHeader(HttpHeader $header, string $value): self
+    public function setHeader(HttpHeader|string $header, string $value): self
     {
-        $this->headers[strtolower($header->value)] = $value;
+        $headerKey = $header instanceof HttpHeader ? $header->value : $header;
+        $this->headers[strtolower($headerKey)] = $value;
         return $this;
     }
 

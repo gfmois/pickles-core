@@ -3,7 +3,7 @@
 namespace Pickles\Routing;
 
 use Closure;
-use Http\Middleware;
+use Pickles\Http\Middleware;
 use Pickles\Container\Container;
 use Pickles\Kernel;
 use RuntimeException;
@@ -132,7 +132,7 @@ class Route
      * Get HTTP middlewares associated with this route.
      *
      * @return Middleware[]
-     */ 
+     */
     public function getMiddlewares(): array
     {
         return $this->middlewares;
@@ -140,18 +140,19 @@ class Route
 
     /**
      * Set HTTP middlewares for this route.
-     * 
+     *
      * @param string[] $middlewares Array of middleware class names.
      * @throws \RuntimeException If any of the provided classes are not valid middleware.
      * @return Route
      */
-    public function setMiddlewares(array $middlewares): self {
-        $not_middlewares = array_filter($middlewares, fn($middleware) => !is_subclass_of($middleware, Middleware::class));
+    public function setMiddlewares(array $middlewares): self
+    {
+        $not_middlewares = array_filter($middlewares, fn ($middleware) => !is_subclass_of($middleware, Middleware::class));
         if (count($not_middlewares) > 0) {
-            throw new RuntimeException('Not all middlewares are valid:' . implode(', ', $not_middlewares));
+            throw new RuntimeException('Not all middlewares are valid: ' . implode(', ', $not_middlewares));
         }
 
-        $this->middlewares = array_map(fn($middleware) => new $middleware(), $middlewares);
+        $this->middlewares = array_map(fn ($middleware) => new $middleware(), $middlewares);
         return $this;
     }
 
@@ -160,7 +161,8 @@ class Route
      *
      * @return bool Returns true if there are middlewares associated with the route, false otherwise.
      */
-    public function hasMiddlewares(): bool {
+    public function hasMiddlewares(): bool
+    {
         return count($this->middlewares) > 0;
     }
 }

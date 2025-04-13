@@ -2,6 +2,9 @@
 
 namespace Pickles\Http;
 
+use Pickles\Container\Container;
+use Pickles\Kernel;
+
 /**
  * Class Response
  *
@@ -197,5 +200,12 @@ class Response
         return (new self())
             ->setStatus(302)
             ->setHeader(HttpHeader::LOCATION, $uri);
+    }
+
+    public static function view(string $view): self {
+        $content = Container::resolve(Kernel::class)->getViewEngine()->render($view);
+        return (new self())
+            ->setContentType("text/html")
+            ->setContent($content);
     }
 }

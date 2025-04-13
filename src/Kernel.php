@@ -9,6 +9,8 @@ use Pickles\Http\Response;
 use Pickles\Routing\Router;
 use Pickles\Server\PhpNativeServer;
 use Pickles\Server\Server;
+use Pickles\View\Engine;
+use Pickles\View\PicklesEngine;
 
 /**
  * Class Kernel
@@ -26,21 +28,23 @@ class Kernel
      *
      * @var Router
      */
+    public Router $router;
 
     /**
      * The request instance representing the current HTTP request.
      *
      * @var Request
      */
+    public Request $request;
 
     /**
      * The server instance providing server-related utilities and information.
      *
      * @var Server
-     */
-    public Router $router;
-    public Request $request;
+     */    
     public Server $server;
+
+    public Engine $viewEngine;
 
     /**
      * Bootstraps the application by initializing and configuring core components.
@@ -56,6 +60,7 @@ class Kernel
         $instance->router = new Router();
         $instance->server = new PhpNativeServer();
         $instance->request = $instance->server->getRequest();
+        $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views"); 
 
         return $instance;
     }
@@ -105,5 +110,13 @@ class Kernel
             $response = Response::text("Not Found")->setStatus(404);
             $this->server->sendResponse($response);
         }
+    }
+
+    /**
+     * Get the value of viewEngine
+     */ 
+    public function getViewEngine()
+    {
+        return $this->viewEngine;
     }
 }

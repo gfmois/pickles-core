@@ -75,4 +75,6 @@ Route::GET(
     fn(Request $request) => Response::json(["result"=> "Authenticated"])
     )->setMiddlewares([AuthMiddleware::class, TestMiddleware::class]);
 
+Route::GET("/html", fn(Request $request) => Response::view("home"));
+
 $app->run();

@@ -4,14 +4,17 @@ namespace Pickles\View;
 
 use Pickles\View\Engine;
 
-class PicklesEngine implements Engine {
+class PicklesEngine implements Engine
+{
     protected string $viewsDir;
 
-    public function __construct(string $viewsDir) {
+    public function __construct(string $viewsDir)
+    {
         $this->viewsDir = $viewsDir;
     }
 
-    public function render(string $view): string {
+    public function render(string $view): string
+    {
         $phpFile = "{$this->viewsDir}/{$view}.php";
         if (!file_exists($phpFile)) {
             throw new FileNotFoundException("File {$view}.php not found on {$this->viewsDir} directory.");

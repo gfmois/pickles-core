@@ -2,6 +2,6 @@
 
 namespace Pickles\View;
 
-class FileNotFoundException extends \Exception {
-    
+class FileNotFoundException extends \Exception
+{
 }

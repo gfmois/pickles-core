@@ -202,7 +202,8 @@ class Response
             ->setHeader(HttpHeader::LOCATION, $uri);
     }
 
-    public static function view(string $view): self {
+    public static function view(string $view): self
+    {
         $content = Container::resolve(Kernel::class)->getViewEngine()->render($view);
         return (new self())
             ->setContentType("text/html")

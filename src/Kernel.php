@@ -41,7 +41,7 @@ class Kernel
      * The server instance providing server-related utilities and information.
      *
      * @var Server
-     */    
+     */
     public Server $server;
 
     public Engine $viewEngine;
@@ -60,7 +60,7 @@ class Kernel
         $instance->router = new Router();
         $instance->server = new PhpNativeServer();
         $instance->request = $instance->server->getRequest();
-        $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views"); 
+        $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
 
         return $instance;
     }
@@ -114,7 +114,7 @@ class Kernel
 
     /**
      * Get the value of viewEngine
-     */ 
+     */
     public function getViewEngine()
     {
         return $this->viewEngine;

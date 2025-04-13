@@ -58,22 +58,17 @@ class Response
     /**
      * Get all headers set in the response.
      *
-     * @return array<string, string>
+     * @param string $key Headers key
+     * @return array<string, string>|string|null
      */
-    public function getHeaders(): array
+    public function getHeaders(?string $key = null): array|string|null
     {
-        return $this->headers;
-    }
+        $headers = $this->headers;
+        if ($key !== null) {
+            return $headers[strtolower($key)] ?? null;
+        }
 
-    /**
-     * Get specific header;
-     *
-     * @param string $header
-     * @return string|null
-     */
-    public function getHeader(string $header): string|null
-    {
-        return $this->headers[strtolower($header)] ?? null;
+        return $headers;
     }
 
     /**

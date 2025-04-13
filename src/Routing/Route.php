@@ -147,7 +147,7 @@ class Route
      */
     public function setMiddlewares(array $middlewares): self
     {
-        $not_middlewares = array_filter($middlewares, fn ($middleware) => !is_subclass_of($middleware, Middleware::class));
+        $not_middlewares = array_filter($middlewares, fn ($middleware) =>  !is_subclass_of($middleware, Middleware::class));
         if (count($not_middlewares) > 0) {
             throw new RuntimeException('Not all middlewares are valid: ' . implode(', ', $not_middlewares));
         }

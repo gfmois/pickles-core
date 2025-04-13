@@ -2,11 +2,14 @@
 
 namespace Pickles\Tests\Routing;
 
+use Closure;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Pickles\Http\HttpMethod;
+use Pickles\Http\Middleware;
 use Pickles\Http\Request;
+use Pickles\Http\Response;
 use Pickles\Routing\Router;
-use Pickles\Server\Server;
 
 class RouterTest extends TestCase
 {
@@ -15,6 +18,27 @@ class RouterTest extends TestCase
         return (new Request())
             ->setUri($uri)
             ->setMethod($method);
+    }
+
+    private function mockMiddleware(): Middleware
+    {
+        return new class () implements Middleware {
+            private string $key;
+            private string $value;
+
+            public function handle(Request $request, Closure $next): Response
+            {
+                $response = $next($request);
+                $response->setHeader($this->key, $this->value);
+                return $response;
+            }
+
+            public function setConfiguration(string $key, string $value): void
+            {
+                $this->key = $key;
+                $this->value = $value;
+            }
+        };
     }
 
     public function test_resolve_basic_route_with_callback_action()
@@ -76,5 +100,28 @@ class RouterTest extends TestCase
             $route = $router->resolveRoute($this->createMockRequest($uri, $method));
             $this->assertEquals($action, $route->getAction());
         }
+    }
+
+    public function test_run_middlewares()
+    {
+        $middleware1 = $this->mockMiddleware();
+        $middleware2 = $this->mockMiddleware();
+
+        $router = new Router();
+        $uri = "/test";
+        $expectedResponse = Response::text("test");
+
+        $route = $router->get($uri, fn () => $expectedResponse);
+        $route->setMiddlewares([$middleware1, $middleware2]);
+
+        foreach ($route->getMiddlewares() as $key => $middleware) {
+            $middleware->setConfiguration("x-testing-middlewares-{$key}", "Working-{$key}");
+        }
+
+        $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
+
+        $this->assertEquals($expectedResponse, $response);
+        $this->assertEquals($response->getHeaders("x-testing-middlewares-0"), "Working-0");
+        $this->assertEquals($response->getHeaders("x-testing-middlewares-1"), "Working-1");
     }
 }

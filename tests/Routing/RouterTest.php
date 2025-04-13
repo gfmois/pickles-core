@@ -22,7 +22,7 @@ class RouterTest extends TestCase
 
     private function mockMiddleware(): Middleware
     {
-        return new class() implements Middleware {
+        return new class () implements Middleware {
             private string $key;
             private string $value;
 
@@ -44,7 +44,7 @@ class RouterTest extends TestCase
     public function test_resolve_basic_route_with_callback_action()
     {
         $uri = "/test";
-        $action = fn() => "test";
+        $action = fn () => "test";
         $router = new Router();
 
         $router->get($uri, $action);
@@ -56,10 +56,10 @@ class RouterTest extends TestCase
     public function test_resolve_multiple_basic_routes_with_callback_action()
     {
         $routes = [
-            "/test" => fn() => "test",
-            "/foo" => fn() => "foo",
-            "/bar" => fn() => "bar",
-            "/long/nested/route" => fn() => "long nested route"
+            "/test" => fn () => "test",
+            "/foo" => fn () => "foo",
+            "/bar" => fn () => "bar",
+            "/long/nested/route" => fn () => "long nested route"
         ];
 
         $router = new Router();
@@ -77,17 +77,17 @@ class RouterTest extends TestCase
     public function test_resolve_multiple_basic_routes_with_callback_for_diferent_http_methods()
     {
         $routes = [
-            [HttpMethod::GET, "/test", fn() => "GET"],
-            [HttpMethod::POST, "/test", fn() => "POST"],
-            [HttpMethod::DELETE, "/test", fn() => "DELETE"],
-            [HttpMethod::PATCH, "/test", fn() => "PATCH"],
-            [HttpMethod::PUT, "/test", fn() => "PUT"],
+            [HttpMethod::GET, "/test", fn () => "GET"],
+            [HttpMethod::POST, "/test", fn () => "POST"],
+            [HttpMethod::DELETE, "/test", fn () => "DELETE"],
+            [HttpMethod::PATCH, "/test", fn () => "PATCH"],
+            [HttpMethod::PUT, "/test", fn () => "PUT"],
 
-            [HttpMethod::GET, "/random/get", fn() => "GET"],
-            [HttpMethod::POST, "/random/nested/post", fn() => "POST"],
-            [HttpMethod::DELETE, "/delete/random/route/nested", fn() => "DELETE"],
-            [HttpMethod::PATCH, "/some/patch/route", fn() => "PATCH"],
-            [HttpMethod::PUT, "/this/is/a/put/route", fn() => "PUT"]
+            [HttpMethod::GET, "/random/get", fn () => "GET"],
+            [HttpMethod::POST, "/random/nested/post", fn () => "POST"],
+            [HttpMethod::DELETE, "/delete/random/route/nested", fn () => "DELETE"],
+            [HttpMethod::PATCH, "/some/patch/route", fn () => "PATCH"],
+            [HttpMethod::PUT, "/this/is/a/put/route", fn () => "PUT"]
         ];
 
         $router = new Router();
@@ -111,7 +111,7 @@ class RouterTest extends TestCase
         $uri = "/test";
         $expectedResponse = Response::text("test");
 
-        $route = $router->get($uri, fn() => $expectedResponse);
+        $route = $router->get($uri, fn () => $expectedResponse);
         $route->setMiddlewares([$middleware1, $middleware2]);
 
         foreach ($route->getMiddlewares() as $key => $middleware) {
@@ -127,7 +127,7 @@ class RouterTest extends TestCase
 
     public function test_middleware_stack_can_be_stopped()
     {
-        $breakMiddleware =  new class implements Middleware {
+        $breakMiddleware =  new class () implements Middleware {
             public function handle(Request $request, Closure $next): Response
             {
                 return Response::text("Stopped");
@@ -142,7 +142,7 @@ class RouterTest extends TestCase
 
         $route = $router->get(
             $uri,
-            fn(Request $request) => $unreachableResponse
+            fn (Request $request) => $unreachableResponse
         )->setMiddlewares([$breakMiddleware, $middleware]);
 
         $route->getMiddlewares()[1]->setConfiguration('x-test', 'working');

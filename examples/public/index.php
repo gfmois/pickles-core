@@ -5,10 +5,17 @@ use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Kernel;
 use Pickles\Routing\Route;
+use Pickles\View\PicklesEngine;
 
-require_once '../vendor/autoload.php';
+require_once '../../vendor/autoload.php';
 
 $app = Kernel::bootstrap();
+$engine = $app->getViewEngine();
+if (!$engine instanceof PicklesEngine) {
+    throw new \RuntimeException("The view engine is not an instance of PicklesEngine.");
+}
+
+$engine->setViewsDir(__DIR__ . "/../views/");
 
 $app->getRouter()->get("/test/{param}", function(Request $request) {
     return Response::json(["result" => $request->getRouteParameters()]);
@@ -75,6 +82,6 @@ Route::GET(
     fn(Request $request) => Response::json(["result"=> "Authenticated"])
     )->setMiddlewares([AuthMiddleware::class, TestMiddleware::class]);
 
-Route::GET("/html", fn(Request $request) => Response::view("home"));
+Route::GET("/html", fn(Request $request) => Response::view("home", ["user" => "some user"]));
 
 $app->run();

@@ -202,9 +202,14 @@ class Response
             ->setHeader(HttpHeader::LOCATION, $uri);
     }
 
-    public static function view(string $view): self
+    public static function view(string $view, array $params = [], ?string $layout = null): self
     {
-        $content = Container::resolve(Kernel::class)->getViewEngine()->render($view);
+        $kernel = Container::resolve(Kernel::class);
+        if (!$kernel instanceof Kernel) {
+            throw new \RuntimeException("Resolved instance is not of type Kernel.");
+        }
+
+        $content = $kernel->getViewEngine()->render($view, $params, $layout);
         return (new self())
             ->setContentType("text/html")
             ->setContent($content);

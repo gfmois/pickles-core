@@ -2,10 +2,10 @@
 
 /**
  * Class PicklesEngine
- * 
+ *
  * This class is an implementation of the `Engine` interface for rendering PHP views within the Pickles framework.
  * It supports dynamic view rendering with optional layout wrapping and content annotation replacement.
- * 
+ *
  * The engine looks for `.php` files inside a specified views directory, and injects rendered view content into
  * a layout template by replacing a predefined annotation (e.g., "@content").
  */

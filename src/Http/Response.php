@@ -202,6 +202,21 @@ class Response
             ->setHeader(HttpHeader::LOCATION, $uri);
     }
 
+    /**
+     * Creates a new instance of the current class with rendered HTML content from a view.
+     *
+     * This static factory method resolves the `Kernel` from the dependency container,
+     * uses its view engine to render the specified view, and returns a new instance
+     * with the rendered content and appropriate content type.
+     *
+     * @param string      $view   The name of the view to render (without .php extension).
+     * @param array       $params An associative array of parameters to be extracted into the view scope.
+     * @param string|null $layout Optional layout name. If null, the engine's default layout is used.
+     *
+     * @return self A new instance of the class with HTML content set.
+     *
+     * @throws \RuntimeException If the resolved Kernel instance is not of the expected type.
+     */
     public static function view(string $view, array $params = [], ?string $layout = null): self
     {
         $kernel = Container::resolve(Kernel::class);

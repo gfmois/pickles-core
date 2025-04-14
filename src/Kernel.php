@@ -44,6 +44,11 @@ class Kernel
      */
     public Server $server;
 
+    /**
+     * The view engine instance used for rendering views.
+     *
+     * @var Engine
+     */
     public Engine $viewEngine;
 
     /**

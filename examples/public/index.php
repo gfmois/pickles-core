@@ -18,7 +18,7 @@ if (!$engine instanceof PicklesEngine) {
 $engine->setViewsDir(__DIR__ . "/../views/");
 
 $app->getRouter()->get("/test/{param}", function(Request $request) {
-    return Response::json(["result" => $request->getRouteParameters()]);
+    return json(["result" => $request->getRouteParameters()]);
 });
 
 $app->getRouter()->post("/test", function(Request $request) {
@@ -44,7 +44,7 @@ $app->getRouter()->delete('/test', function(Request $request) {
 class AuthMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
         if ($request->getHeaders("authorization") != "asdf") {
-            return Response::json(
+            return json(
                 [
                     "message" => "Not Authenticated!",
                     "status" => 401
@@ -62,7 +62,7 @@ class AuthMiddleware implements Middleware {
 class TestMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
         if ($request->getHeaders("authorization") != "asdf") {
-            return Response::json(
+            return json(
                 [
                     "message" => "Not Authenticated!",
                     "status" => 401
@@ -79,9 +79,9 @@ class TestMiddleware implements Middleware {
 
 Route::GET(
     "/middleware", 
-    fn(Request $request) => Response::json(["result"=> "Authenticated"])
+    fn(Request $request) => json(["result"=> "Authenticated"])
     )->setMiddlewares([AuthMiddleware::class, TestMiddleware::class]);
 
-Route::GET("/html", fn(Request $request) => Response::view("home", ["user" => "some user"]));
+Route::GET("/html", fn(Request $request) => view("home", ["user" => "some user"]));
 
 $app->run();

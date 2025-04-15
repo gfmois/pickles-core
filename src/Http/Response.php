@@ -2,7 +2,6 @@
 
 namespace Pickles\Http;
 
-use Pickles\Container\Container;
 use Pickles\Kernel;
 
 /**
@@ -219,7 +218,7 @@ class Response
      */
     public static function view(string $view, array $params = [], ?string $layout = null): self
     {
-        $kernel = Container::resolve(Kernel::class);
+        $kernel = app();
         if (!$kernel instanceof Kernel) {
             throw new \RuntimeException("Resolved instance is not of type Kernel.");
         }

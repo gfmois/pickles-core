@@ -2,7 +2,6 @@
 
 namespace Pickles;
 
-use Pickles\Container\Container;
 use Pickles\Http\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
@@ -61,7 +60,7 @@ class Kernel
      */
     public static function bootstrap()
     {
-        $instance = Container::singleton(self::class);
+        $instance = singleton(self::class);
         $instance->router = new Router();
         $instance->server = new PhpNativeServer();
         $instance->request = $instance->server->getRequest();

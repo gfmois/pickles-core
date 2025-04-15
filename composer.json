@@ -6,7 +6,11 @@
     "autoload": {
         "psr-4": {
             "Pickles\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/http.php",
+            "src/Helpers/kernel.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

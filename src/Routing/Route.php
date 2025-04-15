@@ -4,7 +4,6 @@ namespace Pickles\Routing;
 
 use Closure;
 use Pickles\Http\Middleware;
-use Pickles\Container\Container;
 use Pickles\Kernel;
 use RuntimeException;
 
@@ -120,7 +119,7 @@ class Route
 
     public static function GET(string $uri, Closure $action): self
     {
-        $kernel = Container::resolve(Kernel::class);
+        $kernel = app();
         if (!$kernel instanceof Kernel) {
             throw new RuntimeException('Kernel instance not found in the container.');
         }

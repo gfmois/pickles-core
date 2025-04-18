@@ -244,7 +244,8 @@ class Request
         return $this;
     }
 
-    public function validate(array $validationRules, array $messages = []): array {
+    public function validate(array $validationRules, array $messages = []): array
+    {
         $validator = new Validator($this->data);
 
         return $validator->validate($validationRules, $messages);

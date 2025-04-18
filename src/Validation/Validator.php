@@ -9,7 +9,8 @@ class Validator
 {
     protected array $data;
 
-    public function __construct(array $data) {
+    public function __construct(array $data)
+    {
         $this->data = $data;
     }
 
@@ -24,7 +25,8 @@ class Validator
      *
      * @return array An array containing the validated data. Fields that pass validation will be included.
      */
-    public function validate(array $validationRules, array $messages = []): array {
+    public function validate(array $validationRules, array $messages = []): array
+    {
         $errors = [];
         $validated = [];
         foreach ($validationRules as $field => $rules) {

@@ -137,7 +137,8 @@ class Kernel
         return $this->viewEngine;
     }
 
-    public function abort(Response $response): void {
+    public function abort(Response $response): void
+    {
         $this->server->sendResponse($response);
     }
 }

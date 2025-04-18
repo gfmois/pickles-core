@@ -4,6 +4,7 @@ namespace Pickles\Http;
 
 use InvalidArgumentException;
 use Pickles\Routing\Route;
+use Pickles\Validation\Validator;
 
 /**
  * Class Request
@@ -241,5 +242,11 @@ class Request
         }
 
         return $this;
+    }
+
+    public function validate(array $validationRules, array $messages = []): array {
+        $validator = new Validator($this->data);
+
+        return $validator->validate($validationRules, $messages);
     }
 }

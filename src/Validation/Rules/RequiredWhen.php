@@ -18,6 +18,9 @@ class RequiredWhen implements ValidationRule
         $this->compareWith = $compareWith;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function message(): string
     {
         return "Field required when: {$this->otherField} {$this->operator} {$this->compareWith}.";

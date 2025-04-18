@@ -8,8 +8,10 @@ use Pickles\Http\Response;
 use Pickles\Routing\Router;
 use Pickles\Server\PhpNativeServer;
 use Pickles\Server\Server;
+use Pickles\Validation\Exceptions\ValidationException;
 use Pickles\View\Engine;
 use Pickles\View\PicklesEngine;
+use Throwable;
 
 /**
  * Class Kernel
@@ -109,10 +111,21 @@ class Kernel
     {
         try {
             $response = $this->getRouter()->resolve($this->request);
-            $this->server->sendResponse($response);
+            $this->abort($response);
         } catch (HttpNotFoundException $e) {
-            $response = Response::text("Not Found")->setStatus(404);
-            $this->server->sendResponse($response);
+            $this->abort(Response::text("Not Found")->setStatus(404));
+        } catch (ValidationException $e) {
+            $response = json($e->getErrors())->setStatus(422);
+            $this->abort($response);
+        } catch (Throwable $e) {
+            $response = [
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace(),
+            ];
+
+            $this->abort(
+                json($response)->setStatus(500)
+            );
         }
     }
 
@@ -122,5 +135,9 @@ class Kernel
     public function getViewEngine()
     {
         return $this->viewEngine;
+    }
+
+    public function abort(Response $response): void {
+        $this->server->sendResponse($response);
     }
 }

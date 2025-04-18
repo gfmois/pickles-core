@@ -5,6 +5,8 @@ use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Kernel;
 use Pickles\Routing\Route;
+use Pickles\Validation\Rule;
+use Pickles\Validation\Rules\Required;
 use Pickles\View\PicklesEngine;
 
 require_once '../../vendor/autoload.php';
@@ -17,27 +19,27 @@ if (!$engine instanceof PicklesEngine) {
 
 $engine->setViewsDir(__DIR__ . "/../views/");
 
-$app->getRouter()->get("/test/{param}", function(Request $request) {
+Route::GET("/test/{param}", function(Request $request) {
     return json(["result" => $request->getRouteParameters()]);
 });
 
-$app->getRouter()->post("/test", function(Request $request) {
+Route::POST("/test", function(Request $request) {
     return Response::json(["result" => $request->getData()]);
 });
 
-$app->getRouter()->get("/redirect", function(Request $request) {
+Route::GET("/redirect", function(Request $request) {
     return Response::redirect("/test/asdf");
 });
 
-$app->getRouter()->put('/test', function(Request $request) {
+Route::PUT('/test', function(Request $request) {
     return "PUT OK";
 });
 
-$app->getRouter()->patch('/test', function(Request $request) {
+Route::PATCH('/test', function(Request $request) {
     return "PATCH OK";
 });
 
-$app->getRouter()->delete('/test', function(Request $request) {
+Route::DELETE('/test', function(Request $request) {
     return "DELETE OK";
 });
 
@@ -83,5 +85,15 @@ Route::GET(
     )->setMiddlewares([AuthMiddleware::class, TestMiddleware::class]);
 
 Route::GET("/html", fn(Request $request) => view("home", ["user" => "some user"]));
+
+Route::POST("/validation", fn(Request $request) => json($request->validate([
+    "test" => Rule::required(),
+    "num" => Rule::number(),
+    "email" => [Rule::required(), Rule::email()]
+], [
+    "email" => [
+        Required::class => "Email is required",
+    ]
+    ])));
 
 $app->run();

@@ -2,13 +2,13 @@
 
 namespace Pickles\Http;
 
-use Exception;
+use Pickles\Exceptions\PicklesException;
 
 /**
  * Class HttpNotFoundException
  *
  * Exception thrown when a requested route is not found.
  */
-class HttpNotFoundException extends Exception
+class HttpNotFoundException extends PicklesException
 {
 }

@@ -127,6 +127,46 @@ class Route
         return $kernel->getRouter()->get($uri, $action);
     }
 
+    public static function POST(string $uri, Closure $action): self
+    {
+        $kernel = app();
+        if (!$kernel instanceof Kernel) {
+            throw new RuntimeException('Kernel instance not found in the container.');
+        }
+
+        return $kernel->getRouter()->post($uri, $action);
+    }
+
+    public static function PUT(string $uri, Closure $action): self
+    {
+        $kernel = app();
+        if (!$kernel instanceof Kernel) {
+            throw new RuntimeException('Kernel instance not found in the container.');
+        }
+
+        return $kernel->getRouter()->put($uri, $action);
+    }
+
+    public static function PATCH(string $uri, Closure $action): self
+    {
+        $kernel = app();
+        if (!$kernel instanceof Kernel) {
+            throw new RuntimeException('Kernel instance not found in the container.');
+        }
+
+        return $kernel->getRouter()->patch($uri, $action);
+    }
+
+    public static function DELETE(string $uri, Closure $action): self
+    {
+        $kernel = app();
+        if (!$kernel instanceof Kernel) {
+            throw new RuntimeException('Kernel instance not found in the container.');
+        }
+
+        return $kernel->getRouter()->delete($uri, $action);
+    }
+
     /**
      * Get HTTP middlewares associated with this route.
      *

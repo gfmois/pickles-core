@@ -6,5 +6,4 @@ use Pickles\Exceptions\PicklesException;
 
 class UnknownRuleException extends PicklesException
 {
-
 }

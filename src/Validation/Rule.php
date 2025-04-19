@@ -24,11 +24,12 @@ class Rule
         Number::class
     ];
 
-    public static function loadDefaults(): void {
+    public static function loadDefaults(): void
+    {
         self::load(self::$defaultRules);
-
     }
-    public static function load(array $rules): void {
+    public static function load(array $rules): void
+    {
         foreach ($rules as $class) {
             $className = array_slice(explode("\\", $class), -1)[0];
             $rule_name = snake_case($className);
@@ -37,10 +38,11 @@ class Rule
         }
     }
 
-    public static function nameOf(ValidationRule $rule): string {
+    public static function nameOf(ValidationRule $rule): string
+    {
         $class = new ReflectionClass($rule);
         return snake_case($class->getShortName());
-    } 
+    }
 
     public static function email(): Email
     {
@@ -75,7 +77,8 @@ class Rule
         return new LessThan($number);
     }
 
-    public static function parseBasicRule(string $ruleName): ValidationRule {
+    public static function parseBasicRule(string $ruleName): ValidationRule
+    {
         $class = new ReflectionClass(self::$rules[$ruleName]);
         $nConstructorParams = count($class->getConstructor()?->getParameters() ?? []);
 
@@ -86,10 +89,11 @@ class Rule
         return $class->newInstance();
     }
 
-    public static function parseRuleWithParams(string $ruleName, string $rawParams): ValidationRule {
+    public static function parseRuleWithParams(string $ruleName, string $rawParams): ValidationRule
+    {
         $class = new ReflectionClass(self::$rules[$ruleName]);
         $constructorParams = $class->getConstructor()?->getParameters() ?? [];
-        $params = array_filter(explode(",", $rawParams), fn($param) => !empty($param));
+        $params = array_filter(explode(",", $rawParams), fn ($param) => !empty($param));
 
         if (count($params) != count($constructorParams)) {
             throw new RuleParseException(sprintf(

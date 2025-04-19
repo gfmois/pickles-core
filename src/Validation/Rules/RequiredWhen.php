@@ -2,6 +2,8 @@
 
 namespace Pickles\Validation\Rules;
 
+use Pickles\Validation\Exceptions\UnknownOperatorException;
+
 class RequiredWhen implements ValidationRule
 {
     private string $otherField;
@@ -53,7 +55,7 @@ class RequiredWhen implements ValidationRule
             ">=" => $otherFieldData >= floatval($this->compareWith),
             "<=" => $otherFieldData <= floatval($this->compareWith),
             "!=" => $otherFieldData != floatval($this->compareWith),
-            default => false,
+            default => throw new UnknownOperatorException($this->operator),
         };
 
         return !$isConditionMet || isset($data[$field]) && $data[$field] != "";

@@ -36,11 +36,11 @@ class Validator
 
             $fieldErrors = [];
             foreach ($rules as $rule) {
-                if (!$rule->validate($field, $this->data)) {
-                    if (is_string($rule)) {
-                        $rule = Rule::from($rule);
-                    }
+                if (is_string($rule)) {
+                    $rule = Rule::from($rule);
+                }
 
+                if (!$rule->validate($field, $this->data)) {
                     if (!$rule instanceof ValidationRule) {
                         throw new \InvalidArgumentException("Validation rule must implement ValidationRule interface.");
                     }
@@ -54,7 +54,10 @@ class Validator
             if (count($fieldErrors) > 0) {
                 $errors[$field] = $fieldErrors;
             } else {
-                $validated[$field] = $this->data[$field];
+                // $validated[$field] = $this->data[$field] ?? null;
+                if (array_key_exists($field, $this->data)) {
+                    $validated[$field] = $this->data[$field];
+                }
             }
         }
 

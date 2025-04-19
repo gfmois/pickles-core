@@ -21,6 +21,7 @@ class Rule
         LessThan::class,
         RequiredWhen::class,
         RequiredWith::class,
+        Required::class,
         Number::class
     ];
 
@@ -93,15 +94,15 @@ class Rule
     {
         $class = new ReflectionClass(self::$rules[$ruleName]);
         $constructorParams = $class->getConstructor()?->getParameters() ?? [];
-        $params = array_filter(explode(",", $rawParams), fn ($param) => !empty($param));
+        $params = array_filter(explode(",", $rawParams), fn ($p) => !empty($p));
 
         if (count($params) != count($constructorParams)) {
             throw new RuleParseException(sprintf(
-                "Rule %s requires %d parameters, but %d were provided. (%s passed)",
+                "Rule %s requires %d parameters, but %d were provided. (Received: %s)",
                 $ruleName,
                 count($constructorParams),
                 count($params),
-                $params
+                $rawParams
             ));
         }
 

@@ -87,9 +87,9 @@ Route::GET(
 Route::GET("/html", fn(Request $request) => view("home", ["user" => "some user"]));
 
 Route::POST("/validation", fn(Request $request) => json($request->validate([
-    "test" => Rule::required(),
-    "num" => Rule::number(),
-    "email" => [Rule::required(), Rule::email()]
+    "test" => "required",
+    "num" => "number",
+    "email" => ["required_when:num,>,4"],
 ], [
     "email" => [
         Required::class => "Email is required",

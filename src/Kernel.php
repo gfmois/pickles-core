@@ -9,8 +9,10 @@ use Pickles\Routing\Router;
 use Pickles\Server\PhpNativeServer;
 use Pickles\Server\Server;
 use Pickles\Validation\Exceptions\ValidationException;
+use Pickles\Validation\Rule;
 use Pickles\View\Engine;
 use Pickles\View\PicklesEngine;
+use ReflectionClass;
 use Throwable;
 
 /**
@@ -67,6 +69,7 @@ class Kernel
         $instance->server = new PhpNativeServer();
         $instance->request = $instance->server->getRequest();
         $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
+        Rule::loadDefaults();
 
         return $instance;
     }
@@ -119,6 +122,7 @@ class Kernel
             $this->abort($response);
         } catch (Throwable $e) {
             $response = [
+                "error" => (new ReflectionClass($e))->getShortName(),
                 "message" => $e->getMessage(),
                 "trace" => $e->getTrace(),
             ];

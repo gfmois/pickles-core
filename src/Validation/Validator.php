@@ -37,6 +37,10 @@ class Validator
             $fieldErrors = [];
             foreach ($rules as $rule) {
                 if (!$rule->validate($field, $this->data)) {
+                    if (is_string($rule)) {
+                        $rule = Rule::from($rule);
+                    }
+
                     if (!$rule instanceof ValidationRule) {
                         throw new \InvalidArgumentException("Validation rule must implement ValidationRule interface.");
                     }

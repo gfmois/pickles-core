@@ -8,6 +8,7 @@ use Pickles\Validation\Rules\Number;
 use Pickles\Validation\Rules\Required;
 use Pickles\Validation\Rules\RequiredWhen;
 use Pickles\Validation\Rules\RequiredWith;
+use Pickles\Validation\Rules\ValidationRule;
 
 class Rule
 {
@@ -42,5 +43,10 @@ class Rule
     public static function lessThan(int|float $number): LessThan
     {
         return new LessThan($number);
+    }
+
+    public static function from(string $validationKey): ?ValidationRule
+    {
+        return null;
     }
 }

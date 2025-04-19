@@ -9,7 +9,8 @@
         },
         "files": [
             "src/Helpers/http.php",
-            "src/Helpers/kernel.php"
+            "src/Helpers/kernel.php",
+            "src/Helpers/string.php"
         ]
     },
     "autoload-dev": {

@@ -45,8 +45,9 @@ class Validator
                         throw new \InvalidArgumentException("Validation rule must implement ValidationRule interface.");
                     }
 
-                    $message = $messages[$field][$rule::class] ?? $rule->message();
-                    $fieldErrors[$rule::class] = $message;
+                    $ruleName = Rule::nameOf($rule);
+                    $message = $messages[$field][$ruleName] ?? $rule->message();
+                    $fieldErrors[$ruleName] = $message;
                 }
             }
 

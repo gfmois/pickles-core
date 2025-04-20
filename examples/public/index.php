@@ -96,4 +96,12 @@ Route::POST("/validation", fn(Request $request) => json($request->validate([
     ]
     ])));
 
+Route::GET("/session", function(Request $request) {
+    return Response::json([
+        "sessionId"=> session()->id(),
+        "test" => session()->get("test"),
+        "default" => session()->get("default", "default value"),
+    ]);
+});
+
 $app->run();

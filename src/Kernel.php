@@ -8,6 +8,8 @@ use Pickles\Http\Response;
 use Pickles\Routing\Router;
 use Pickles\Server\PhpNativeServer;
 use Pickles\Server\Server;
+use Pickles\Session\PhpNativeSessionStorage;
+use Pickles\Session\Session;
 use Pickles\Validation\Exceptions\ValidationException;
 use Pickles\Validation\Rule;
 use Pickles\View\Engine;
@@ -54,6 +56,14 @@ class Kernel
      */
     public Engine $viewEngine;
 
+
+    /**
+     * The session instance used to manage user sessions.
+     *
+     * @var Session
+     */
+    public Session $session;
+
     /**
      * Bootstraps the application by initializing and configuring core components.
      *
@@ -69,6 +79,7 @@ class Kernel
         $instance->server = new PhpNativeServer();
         $instance->request = $instance->server->getRequest();
         $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
+        $instance->session = new Session(new PhpNativeSessionStorage());
         Rule::loadDefaults();
 
         return $instance;
@@ -144,5 +155,14 @@ class Kernel
     public function abort(Response $response): void
     {
         $this->server->sendResponse($response);
+    }
+
+    /**
+     * Get the value of session
+     * @return Session
+     */
+    public function getSession(): Session
+    {
+        return $this->session;
     }
 }

@@ -4,6 +4,7 @@ namespace Pickles\Tests\Validation;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Pickles\Validation\Exceptions\UnknownOperatorException;
 use Pickles\Validation\Rule;
 use Pickles\Validation\Rules\LessThan;
 use Pickles\Validation\Rules\Number;
@@ -132,5 +133,12 @@ class ValidationRuleTest extends TestCase
     {
         $rule = new RequiredWhen($other, $operator, $compareWith);
         $this->assertEquals($expected, $rule->validate($field, $data));
+    }
+
+    public function test_required_when_throws_parse_rule_exception_when_operator_is_invalid() {
+        $rule = new RequiredWhen("other", "|||", "test");
+        $data = ["other" => 5, "test" => 1];
+        $this->expectException(UnknownOperatorException::class);
+        $rule->validate("test", $data);
     }
 }

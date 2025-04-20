@@ -135,7 +135,8 @@ class ValidationRuleTest extends TestCase
         $this->assertEquals($expected, $rule->validate($field, $data));
     }
 
-    public function test_required_when_throws_parse_rule_exception_when_operator_is_invalid() {
+    public function test_required_when_throws_parse_rule_exception_when_operator_is_invalid()
+    {
         $rule = new RequiredWhen("other", "|||", "test");
         $data = ["other" => 5, "test" => 1];
         $this->expectException(UnknownOperatorException::class);

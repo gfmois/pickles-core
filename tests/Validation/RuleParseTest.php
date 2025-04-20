@@ -36,12 +36,14 @@ class RuleParseTest extends TestCase
         $this->assertInstanceOf($class, Rule::from($name));
     }
 
-    public function test_parsing_unknown_rules_throws_unkown_rule_exception() {
+    public function test_parsing_unknown_rules_throws_unkown_rule_exception()
+    {
         $this->expectException(UnknownRuleException::class);
         Rule::from("unknown");
     }
 
-    public static function getRulesWithParameters() {
+    public static function getRulesWithParameters()
+    {
         return [
             [new LessThan(5), "less_than:5"],
             [new RequiredWith("other"), "required_with:other"],
@@ -50,11 +52,13 @@ class RuleParseTest extends TestCase
     }
 
     #[DataProvider("getRulesWithParameters")]
-    public function test_parse_rules_with_parameters($expected, $rule) {
+    public function test_parse_rules_with_parameters($expected, $rule)
+    {
         $this->assertEquals($expected, Rule::from($rule));
     }
 
-    public static function getRulesWithParametersWithError() {
+    public static function getRulesWithParametersWithError()
+    {
         return [
             ["less_than"],
             ["less_than:"],
@@ -69,7 +73,8 @@ class RuleParseTest extends TestCase
     }
 
     #[DataProvider("getRulesWithParametersWithError")]
-    public function test_parsing_rule_with_parameters_without_passing_correct_parameters_throws_rule_parse_exception($rule) {
+    public function test_parsing_rule_with_parameters_without_passing_correct_parameters_throws_rule_parse_exception($rule)
+    {
         $this->expectException(RuleParseException::class);
         Rule::from($rule);
     }

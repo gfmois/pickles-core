@@ -158,7 +158,7 @@ class ValidatorTest extends TestCase
             ]
         ];
 
-        $v = new Validator($data,);
+        $v = new Validator($data, );
 
         try {
             $v->validate($rules, $messages);

@@ -2,29 +2,28 @@
 
 namespace Pickles\Session;
 
+use Constants;
+
 class Session
 {
     protected SessionStorage $sessionDriver;
-    public const FLASH_KEY = "__flash__";
-    public const FLASH_OLD_KEY = "__flash_old__";
-    public const FLASH_NEW_KEY = "__flash_new__";
 
     public function __construct(SessionStorage $storage)
     {
         $this->sessionDriver = $storage;
         $this->sessionDriver->start();
 
-        if (!$this->sessionDriver->has(self::FLASH_KEY)) {
-            $this->sessionDriver->set(self::FLASH_KEY, [
-                self::FLASH_OLD_KEY => [],
-                self::FLASH_NEW_KEY => [],
+        if (!$this->sessionDriver->has(Constants::FLASH_KEY)) {
+            $this->sessionDriver->set(Constants::FLASH_KEY, [
+                Constants::FLASH_OLD_KEY => [],
+                Constants::FLASH_NEW_KEY => [],
             ]);
         }
     }
 
     public function __destruct()
     {
-        foreach ($this->sessionDriver->get(self::FLASH_KEY)[self::FLASH_OLD_KEY] as $key) {
+        foreach ($this->sessionDriver->get(Constants::FLASH_KEY)[Constants::FLASH_OLD_KEY] as $key) {
             $this->sessionDriver->remove($key);
         }
         $this->ageFlashData();
@@ -34,17 +33,17 @@ class Session
     public function flash(string $key, mixed $value)
     {
         $this->sessionDriver->set($key, $value);
-        $flash = $this->sessionDriver->get(self::FLASH_KEY);
-        $flash[self::FLASH_NEW_KEY][] = $key;
-        $this->sessionDriver->set(self::FLASH_KEY, $flash);
+        $flash = $this->sessionDriver->get(Constants::FLASH_KEY);
+        $flash[Constants::FLASH_NEW_KEY][] = $key;
+        $this->sessionDriver->set(Constants::FLASH_KEY, $flash);
     }
 
     public function ageFlashData()
     {
-        $flash = $this->sessionDriver->get(self::FLASH_KEY);
-        $flash[self::FLASH_OLD_KEY] = $flash[self::FLASH_NEW_KEY];
-        $flash[self::FLASH_NEW_KEY] = [];
-        $this->sessionDriver->set(self::FLASH_KEY, $flash);
+        $flash = $this->sessionDriver->get(Constants::FLASH_KEY);
+        $flash[Constants::FLASH_OLD_KEY] = $flash[Constants::FLASH_NEW_KEY];
+        $flash[Constants::FLASH_NEW_KEY] = [];
+        $this->sessionDriver->set(Constants::FLASH_KEY, $flash);
     }
 
     public function start()

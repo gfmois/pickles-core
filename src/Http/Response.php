@@ -2,6 +2,7 @@
 
 namespace Pickles\Http;
 
+use Constants;
 use Pickles\Kernel;
 
 /**
@@ -227,5 +228,14 @@ class Response
         return (new self())
             ->setContentType("text/html")
             ->setContent($content);
+    }
+
+    public function withErrors(array $errors, int $status = 400): self
+    {
+        $this->setStatus($status);
+        session()->flash(Constants::ERRORS_KEY, $errors);
+        session()->flash(Constants::OLD_DATA_KEY, request()->getData());
+
+        return $this;
     }
 }

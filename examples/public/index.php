@@ -101,4 +101,11 @@ Route::GET("/session", function(Request $request) {
     return json($_SESSION);
 });
 
+Route::POST("/form", function (Request $request) {
+    return json($request->validate([
+        "name"=> "required",
+        "email" => ["required", "email"],
+    ]));
+});
+
 $app->run();

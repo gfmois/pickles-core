@@ -2,6 +2,8 @@
 
 namespace Pickles;
 
+use Constants;
+use Pickles\Http\HttpMethod;
 use Pickles\Http\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
@@ -124,13 +126,11 @@ class Kernel
     public function run()
     {
         try {
-            $response = $this->getRouter()->resolve($this->request);
-            $this->abort($response);
+            $this->terminate($this->getRouter()->resolve($this->request));
         } catch (HttpNotFoundException $e) {
             $this->abort(Response::text("Not Found")->setStatus(404));
         } catch (ValidationException $e) {
-            $response = json($e->getErrors())->setStatus(422);
-            $this->abort($response);
+            $this->abort(back()->withErrors($e->getErrors(), 422));
         } catch (Throwable $e) {
             $response = [
                 "error" => (new ReflectionClass($e))->getShortName(),
@@ -152,11 +152,6 @@ class Kernel
         return $this->viewEngine;
     }
 
-    public function abort(Response $response): void
-    {
-        $this->server->sendResponse($response);
-    }
-
     /**
      * Get the value of session
      * @return Session
@@ -164,5 +159,23 @@ class Kernel
     public function getSession(): Session
     {
         return $this->session;
+    }
+
+    public function prepareNextRequest()
+    {
+        if ($this->request->getMethod() === HttpMethod::GET) {
+            $this->session->set(Constants::PREVIOUS_REQUEST_KEY, $this->request->getUri());
+        }
+    }
+
+    public function terminate(Response $response)
+    {
+        $this->prepareNextRequest();
+        $this->server->sendResponse($response);
+    }
+
+    public function abort(Response $response): void
+    {
+        $this->terminate($response);
     }
 }

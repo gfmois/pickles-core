@@ -11,4 +11,5 @@ interface SessionStorage
     public function has(string $key): bool;
     public function remove(string $key);
     public function destroy(): bool;
+    public function save(): bool;
 }

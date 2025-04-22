@@ -40,4 +40,9 @@ class PhpNativeSessionStorage implements SessionStorage
     {
         return session_destroy();
     }
+
+    public function save(): bool
+    {
+        return session_write_close();
+    }
 }

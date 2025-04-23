@@ -8,4 +8,5 @@ class Constants
     public const ERRORS_KEY = "__errors";
     public const PREVIOUS_REQUEST_KEY = "__previous_request";
     public const OLD_DATA_KEY = "__old_data";
+    public const FRAMEWORK_SESSION_ID_KEY = "__pickles_sid";
 }

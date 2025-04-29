@@ -8,7 +8,9 @@ class FileSessionStorage implements SessionStorage
 {
     protected string $filesPath = "/pickles/sessions";
     protected array $cachedFiles = [];
-    public function start() {}
+    public function start()
+    {
+    }
 
     public function id(): string
     {

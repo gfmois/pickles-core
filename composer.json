@@ -12,6 +12,7 @@
             "src/Helpers/kernel.php",
             "src/Helpers/string.php",
             "src/Helpers/session.php",
+            "src/Helpers/database.php",
             "src/Utils/Constants.php"
         ]
     },

@@ -1,5 +1,6 @@
 <?php
 
+use Pickles\Database\DB;
 use Pickles\Http\Middleware;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
@@ -106,6 +107,23 @@ Route::POST("/form", function (Request $request) {
         "name"=> "required",
         "email" => ["required", "email"],
     ]));
+});
+
+Route::POST("/user", function (Request $request) {
+    $result = DB::statement("INSERT INTO users (name, email) VALUES (:name, :email)", [
+        "name" => $request->getData("name"),
+        "email" => $request->getData("email"),
+    ]);
+
+    return json([
+        "result" => $result,
+    ]);
+});
+
+Route::GET("/users", function (Request $request) {
+    return json([
+        "result" => DB::statement("SELECT * FROM users"),
+    ]);
 });
 
 $app->run();

@@ -3,6 +3,8 @@
 namespace Pickles;
 
 use Constants;
+use Pickles\Database\Drivers\DatabaseDriver;
+use Pickles\Database\Drivers\PdoDriver;
 use Pickles\Http\HttpMethod;
 use Pickles\Http\HttpNotFoundException;
 use Pickles\Http\Request;
@@ -66,6 +68,8 @@ class Kernel
      */
     public Session $session;
 
+    public DatabaseDriver $database;
+
     /**
      * Bootstraps the application by initializing and configuring core components.
      *
@@ -82,6 +86,8 @@ class Kernel
         $instance->request = $instance->server->getRequest();
         $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
         $instance->session = new Session(new PhpNativeSessionStorage());
+        $instance->database = new PdoDriver();
+        $instance->database->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
         Rule::loadDefaults();
 
         return $instance;
@@ -172,6 +178,8 @@ class Kernel
     {
         $this->prepareNextRequest();
         $this->server->sendResponse($response);
+        $this->database->close();
+        exit(0);
     }
 
     public function abort(Response $response): void

@@ -5,6 +5,7 @@ namespace Pickles;
 use Constants;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Drivers\PdoDriver;
+use Pickles\Database\Model;
 use Pickles\Http\HttpMethod;
 use Pickles\Http\HttpNotFoundException;
 use Pickles\Http\Request;
@@ -88,6 +89,8 @@ class Kernel
         $instance->session = new Session(new PhpNativeSessionStorage());
         $instance->database = new PdoDriver();
         $instance->database->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
+
+        Model::setDatabaseDriver($instance->database);
         Rule::loadDefaults();
 
         return $instance;

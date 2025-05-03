@@ -169,7 +169,8 @@ class ModelTest extends TestCase
     /**
       * @depends test_create_model
       */
-      public function test_where_and_first_where() {
+    public function test_where_and_first_where()
+    {
         $this->createTestTable("mock_models", ["test", "name"], true);
 
         MockModelFillable::create(["test" => "First", "name" => "Name"]);
@@ -190,7 +191,8 @@ class ModelTest extends TestCase
       * @depends test_create_model
       * @depends test_find_model
       */
-      public function test_update() {
+    public function test_update()
+    {
         $this->createTestTable("mock_models", ["test", "name"]);
 
         MockModelFillable::create(["test" => "test", "name" => "name"]);
@@ -210,7 +212,8 @@ class ModelTest extends TestCase
       * @depends test_create_model
       * @depends test_find_model
       */
-      public function test_delete() {
+    public function test_delete()
+    {
         $this->createTestTable("mock_models", ["test", "name"]);
 
         MockModelFillable::create(["test" => "test", "name" => "name"]);

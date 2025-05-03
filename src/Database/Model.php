@@ -6,6 +6,7 @@ use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Exceptions\NoDriverSetException;
 use Pickles\Database\Exceptions\NoFillableAttributesDefinedException;
 use Pickles\Database\Exceptions\NoFillableAttributesProvidedException;
+use Pickles\Database\Exceptions\PrimaryKeyNotSetException;
 
 abstract class Model
 {
@@ -50,7 +51,7 @@ abstract class Model
     public function __call($method, $args)
     {
         // Check if the method requires a database driver
-        if (in_array($method, ['save', 'first', 'find', 'all', 'where'])) {
+        if (in_array($method, ['save', 'first', 'find', 'all', 'where', 'firstWhere', 'update', 'delete'])) {
             $this->checkDriver();
         }
 
@@ -205,6 +206,28 @@ abstract class Model
     }
 
     /**
+     * Retrieves the first record from the database where the specified column matches the given value.
+     *
+     * @param string $column The name of the column to filter by.
+     * @param mixed $value The value to match against the specified column.
+     * @return static|null An instance of the model with the matched record's attributes, or null if no match is found.
+     */
+    public static function firstWhere(string $column, mixed $value): ?static
+    {
+        $model = new static();
+        $rows = self::$driver->statement(
+            "SELECT * FROM $model->table WHERE $column = ? LIMIT 1",
+            [$value]
+        );
+
+        if (count($rows) == 0) {
+            return null;
+        }
+
+        return $model->setAttributes($rows[0]);
+    }
+
+    /**
      * Finds a record in the database by its primary key.
      *
      * @param int|string $id The primary key of the record to find.
@@ -261,6 +284,60 @@ abstract class Model
         }
 
         return $model->mapRowsToModels($model, $rows);
+    }
+
+    /**
+     * Updates the current model instance in the database with the attributes set on the model.
+     *
+     * If the `insertTimestamps` property is true, the `updated_at` timestamp is automatically set
+     * to the current date and time before updating the record.
+     *
+     * @throws PrimaryKeyNotSetException If the primary key is not set in the model's attributes.
+     *
+     * @return static Returns the current instance of the model after the update operation.
+     */
+    public function update(): static
+    {
+        if ($this->insertTimestamps) {
+            $updated_at = date("Y-m-d H:i:s");
+            $this->attributes["updated_at"] = $updated_at;
+        }
+
+        $databaseColumns = array_keys($this->attributes);
+        $bind = implode(",", array_map(fn ($column) => "$column = ?", $databaseColumns));
+        $id = $this->attributes[$this->primaryKey] ?? null;
+
+        if ($id === null) {
+            throw new PrimaryKeyNotSetException("Primary key is not found for " . static::class . " while updating.");
+        }
+
+        self::$driver->statement(
+            "UPDATE $this->table SET $bind WHERE $this->primaryKey = $id",
+            array_values($this->attributes)
+        );
+
+        return $this;
+    }
+
+    /**
+     * Deletes the current record from the database based on its primary key.
+     *
+     * @throws PrimaryKeyNotSetException If the primary key is not set or found in the attributes.
+     * @return static Returns the current instance of the model.
+     */
+    public function delete(): static
+    {
+        $id = $this->attributes[$this->primaryKey] ?? null;
+
+        if ($id === null) {
+            throw new PrimaryKeyNotSetException("Primary key is not found for " . static::class . " while deleting.");
+        }
+
+        self::$driver->statement(
+            "DELETE FROM $this->table WHERE $this->primaryKey = {$id};"
+        );
+
+        return $this;
     }
 
     /**

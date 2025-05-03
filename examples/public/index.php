@@ -45,6 +45,21 @@ Route::DELETE('/test', function(Request $request) {
     return "DELETE OK";
 });
 
+Route::post('/users/{id}/update', function (Request $request) {
+    $user = User::find($request->getRouteParameters('id'));
+
+    $user->name = $request->getData('name');
+    $user->email = $request->getData('email');
+    
+    return json($user->update()->toArray());
+});
+
+Route::delete('/users/{id}/delete', function (Request $request) {
+    $user = User::find($request->getRouteParameters('id'));
+
+    return json($user->delete()->toArray());
+});
+
 class AuthMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
         if ($request->getHeaders("authorization") != "asdf") {

@@ -125,7 +125,7 @@ class Route
      * @return self Returns the current instance of the route.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function GET(string $uri, Closure $action): self
+    public static function get(string $uri, Closure $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -143,7 +143,7 @@ class Route
      * @return self Returns the current instance of the route for method chaining.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function POST(string $uri, Closure $action): self
+    public static function post(string $uri, Closure $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -161,7 +161,7 @@ class Route
      * @return self Returns the current instance of the route for method chaining.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function PUT(string $uri, Closure $action): self
+    public static function put(string $uri, Closure $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -181,7 +181,7 @@ class Route
      *
      * @return self Returns the current instance for method chaining.
      */
-    public static function PATCH(string $uri, Closure $action): self
+    public static function patch(string $uri, Closure $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -199,7 +199,7 @@ class Route
      * @return self Returns the current instance of the route.
      * @throws \RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function DELETE(string $uri, Closure $action): self
+    public static function delete(string $uri, Closure $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {

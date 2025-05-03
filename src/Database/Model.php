@@ -14,6 +14,7 @@ abstract class Model
     protected array $hidden = [];
     protected array $fillable = [];
     protected array $attributes = [];
+    protected bool $insertTimestamps = false;
     private static ?DatabaseDriver $driver = null;
 
     /**
@@ -77,6 +78,17 @@ abstract class Model
     {
         if (self::$driver === null) {
             throw new NoDriverSetException("Database driver is not set.");
+        }
+    }
+
+    private function checkTimestamps(): void
+    {
+        if ($this->insertTimestamps) {
+            $created_at = date("Y-m-d H:m:s");
+            $updated_at = date("Y-m-d H:m:s");
+
+            $this->attributes["created_at"] = $created_at;
+            $this->attributes["updated_at"] = $updated_at;
         }
     }
 
@@ -163,6 +175,7 @@ abstract class Model
      */
     public function save(): static
     {
+        $this->checkTimestamps();
         $columns = implode(", ", array_keys($this->attributes));
         $values = array_values($this->attributes);
         $bind = implode(", ", array_fill(0, count($this->attributes), '?'));

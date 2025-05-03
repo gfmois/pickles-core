@@ -4,6 +4,16 @@ namespace Pickles\Validation\Rules;
 
 use Pickles\Validation\Exceptions\UnknownOperatorException;
 
+/**
+ * Class RequiredWhen
+ *
+ * This class implements a validation rule that conditionally requires a field
+ * to be present based on a given condition. It is part of the validation rules
+ * in the Pickles Framework.
+ *
+ * @package Validation\Rules
+ * @implements ValidationRule
+ */
 class RequiredWhen implements ValidationRule
 {
     private string $otherField;

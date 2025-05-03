@@ -354,6 +354,18 @@ abstract class Model
             $models[] = (new static())->setAttributes($rows[$i]);
         }
 
+        return $models;
+    }
+
+    /**
+     * Maps an array of models to an array of objects.
+     *
+     * @param array $models An array of models to be mapped.
+     * @return array An array of objects mapped from the provided models.
+     */
+    public static function mapModelsToObjects(array $models): array
+    {
+        // FIXME: This method will be removed in the future and implemented as override of toString method or something similar
         return array_map(fn ($model) => $model->toArray(), $models);
     }
 }

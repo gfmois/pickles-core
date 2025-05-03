@@ -161,7 +161,7 @@ Route::GET("/users/first", function (Request $request) {
 
 Route::GET("/users/where", function (Request $request) {
     return json([
-        "result" => User::where("name", "mass"),
+        "result" => User::mapModelsToObjects( User::where("name", "mass")),
     ]);
 });
 
@@ -174,7 +174,7 @@ Route::GET("/users/{id}", function (Request $request) {
 
 Route::GET("/users", function (Request $request) {
     return json([
-        "result" => User::all(),
+        "result" => User::mapModelsToObjects(User::all()),
     ]);
 });
 

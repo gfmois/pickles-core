@@ -11,6 +11,8 @@ use Pickles\Validation\Validator;
  *
  * Encapsulates the HTTP request data retrieved from the Server implementation.
  * Provides access to URI, method, POST data, and query parameters.
+ *
+ * @package Pickles\Http
  */
 class Request
 {
@@ -244,6 +246,15 @@ class Request
         return $this;
     }
 
+    /**
+     * Validates the request data against the provided validation rules.
+     *
+     * @param array<string, mixed> $validationRules An associative array of validation rules where the key is the field name
+     *                                and the value is the validation rule(s) to apply.
+     * @param array<string, string> $messages Optional. An associative array of custom error messages where the key is the rule
+     *                        or field name and the value is the custom message.
+     * @return array<string, mixed> An array containing the validation results, including any errors encountered.
+     */
     public function validate(array $validationRules, array $messages = []): array
     {
         $validator = new Validator($this->data);

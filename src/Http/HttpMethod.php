@@ -7,6 +7,8 @@ namespace Pickles\Http;
  *
  * Represents the supported HTTP methods used in routing and requests.
  * Matches standard HTTP verbs used in RESTful APIs.
+ *
+ * @package Pickles\Http
  */
 enum HttpMethod: string
 {

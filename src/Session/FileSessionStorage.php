@@ -4,6 +4,7 @@ namespace Pickles\Session;
 
 use Constants;
 
+// FIXME: This class is not yet implemented. It is a placeholder for future development.
 class FileSessionStorage implements SessionStorage
 {
     protected string $filesPath = "/pickles/sessions";
@@ -50,6 +51,7 @@ class FileSessionStorage implements SessionStorage
     public function destroy(): bool
     {
         $filePath = $this->getFilePath();
+        return false;
     }
     public function save(): bool
     {

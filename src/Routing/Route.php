@@ -117,6 +117,14 @@ class Route
         return array_combine($this->parameters, array_slice($arguments, 1));
     }
 
+    /**
+     * Registers a GET route with the application's router.
+     *
+     * @param string $uri The URI pattern for the route.
+     * @param Closure $action The action to be executed when the route is matched.
+     * @return self Returns the current instance of the route.
+     * @throws RuntimeException If the Kernel instance is not found in the container.
+     */
     public static function GET(string $uri, Closure $action): self
     {
         $kernel = app();
@@ -127,6 +135,14 @@ class Route
         return $kernel->getRouter()->get($uri, $action);
     }
 
+    /**
+     * Registers a POST route with the specified URI and action.
+     *
+     * @param string $uri The URI pattern for the route.
+     * @param Closure $action The action to be executed when the route is matched.
+     * @return self Returns the current instance of the route for method chaining.
+     * @throws RuntimeException If the Kernel instance is not found in the container.
+     */
     public static function POST(string $uri, Closure $action): self
     {
         $kernel = app();
@@ -137,6 +153,14 @@ class Route
         return $kernel->getRouter()->post($uri, $action);
     }
 
+    /**
+     * Registers a new route that responds to HTTP PUT requests.
+     *
+     * @param string $uri The URI pattern for the route.
+     * @param Closure $action The action to be executed when the route is matched.
+     * @return self Returns the current instance of the route for method chaining.
+     * @throws RuntimeException If the Kernel instance is not found in the container.
+     */
     public static function PUT(string $uri, Closure $action): self
     {
         $kernel = app();
@@ -147,6 +171,16 @@ class Route
         return $kernel->getRouter()->put($uri, $action);
     }
 
+    /**
+     * Registers a new PATCH route with the application's router.
+     *
+     * @param string $uri The URI pattern for the route.
+     * @param \Closure $action The action to be executed when the route is matched.
+     *
+     * @throws \RuntimeException If the Kernel instance is not found in the container.
+     *
+     * @return self Returns the current instance for method chaining.
+     */
     public static function PATCH(string $uri, Closure $action): self
     {
         $kernel = app();
@@ -157,6 +191,14 @@ class Route
         return $kernel->getRouter()->patch($uri, $action);
     }
 
+    /**
+     * Registers a DELETE route with the specified URI and action.
+     *
+     * @param string $uri The URI pattern for the route.
+     * @param \Closure $action The action to be executed when the route is matched.
+     * @return self Returns the current instance of the route.
+     * @throws \RuntimeException If the Kernel instance is not found in the container.
+     */
     public static function DELETE(string $uri, Closure $action): self
     {
         $kernel = app();

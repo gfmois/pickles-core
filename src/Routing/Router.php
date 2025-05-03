@@ -5,7 +5,7 @@ namespace Pickles\Routing;
 use Closure;
 use Pickles\Http\Middleware;
 use Pickles\Http\HttpMethod;
-use Pickles\Http\HttpNotFoundException;
+use Pickles\Http\Exceptions\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Routing\Route;
@@ -15,6 +15,8 @@ use Pickles\Routing\Route;
  *
  * A simple HTTP router that maps URIs and HTTP methods to handlers.
  * Supports typical RESTful HTTP methods and route resolution.
+ *
+ * @package Pickles\Routing
  */
 class Router
 {

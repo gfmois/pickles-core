@@ -5,6 +5,14 @@ namespace Pickles\Validation;
 use Pickles\Validation\Exceptions\ValidationException;
 use Pickles\Validation\Rules\ValidationRule;
 
+/**
+ * Class Validator
+ *
+ * This class is responsible for handling validation logic within the application.
+ * It provides methods to validate data against specific rules and constraints.
+ *
+ * @package Validation
+ */
 class Validator
 {
     protected array $data;
@@ -23,7 +31,7 @@ class Validator
      *                               be field names, and the values should be arrays where the keys are
      *                               validation rule class names and the values are the corresponding error messages.
      *
-     * @return array An array containing the validated data. Fields that pass validation will be included.
+     * @return array<string, mixed> An array containing the validated data. Fields that pass validation will be included.
      */
     public function validate(array $validationRules, array $messages = []): array
     {

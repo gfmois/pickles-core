@@ -114,6 +114,8 @@ class User extends Model {
     private string $name;
     private string $email;
 
+    public array $fillable = ["name", "email"];
+
     public function setName(string $name): void {
         $this->name = $name;
     }
@@ -129,21 +131,38 @@ class User extends Model {
 
 }
 
-Route::POST("/user", function (Request $request) {
-    $user = new User();
-    $user->email = $request->getData("email");
-    $user->name = $request->getData("name");
-    $result = $user->save();
-
+Route::POST("/users", function (Request $request) {
     return json([
-        "result" => $result,
+        "result" => User::create($request->getData())->toArray(),
+    ]);
+});
+
+Route::GET("/users/first", function (Request $request) {
+    return json([
+        "result" => User::first()->toArray(),
+    ]);
+});
+
+
+Route::GET("/users/where", function (Request $request) {
+    return json([
+        "result" => User::where("name", "mass"),
+    ]);
+});
+
+Route::GET("/users/{id}", function (Request $request) {
+    $id = $request->getRouteParameters()["id"] ?? null;
+    return json([
+        "result" => User::find($id)->toArray(),
     ]);
 });
 
 Route::GET("/users", function (Request $request) {
     return json([
-        "result" => DB::statement("SELECT * FROM users"),
+        "result" => User::all(),
     ]);
 });
+
+
 
 $app->run();

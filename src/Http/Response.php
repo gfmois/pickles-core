@@ -230,6 +230,16 @@ class Response
             ->setContent($content);
     }
 
+    /**
+     * Attach error messages and old input data to the session and set the HTTP status code.
+     *
+     * This method is typically used to handle validation errors or other error scenarios
+     * where you want to provide feedback to the user and preserve their input data.
+     *
+     * @param array $errors An array of error messages to be flashed to the session.
+     * @param int $status The HTTP status code to set for the response. Defaults to 400.
+     * @return self Returns the current instance for method chaining.
+     */
     public function withErrors(array $errors, int $status = 400): self
     {
         $this->setStatus($status);

@@ -7,7 +7,7 @@ use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Drivers\PdoDriver;
 use Pickles\Database\Model;
 use Pickles\Http\HttpMethod;
-use Pickles\Http\HttpNotFoundException;
+use Pickles\Http\Exceptions\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Routing\Router;
@@ -170,6 +170,15 @@ class Kernel
         return $this->session;
     }
 
+    /**
+     * Prepares the application for the next request.
+     *
+     * If the current request method is GET, this method stores the URI of the
+     * current request in the session under a predefined key. This allows the
+     * application to keep track of the previous request's URI for future use.
+     *
+     * @return void
+     */
     public function prepareNextRequest()
     {
         if ($this->request->getMethod() === HttpMethod::GET) {
@@ -177,6 +186,16 @@ class Kernel
         }
     }
 
+    /**
+     * Terminates the current request lifecycle.
+     *
+     * This method performs cleanup tasks after the response has been sent.
+     * It prepares the system for the next request, sends the response to the client,
+     * closes the database connection, and terminates the script execution.
+     *
+     * @param Response $response The response object to be sent to the client.
+     * @return void
+     */
     public function terminate(Response $response)
     {
         $this->prepareNextRequest();
@@ -185,6 +204,13 @@ class Kernel
         exit(0);
     }
 
+    /**
+     * Aborts the current process by terminating it with the given response.
+     *
+     * @param Response $response The response object used to terminate the process.
+     *
+     * @return void
+     */
     public function abort(Response $response): void
     {
         $this->terminate($response);

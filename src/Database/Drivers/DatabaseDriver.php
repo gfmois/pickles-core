@@ -65,4 +65,13 @@ interface DatabaseDriver
      * @return void
      */
     public function insert(array $data): void;
+
+    /**
+     * Deletes a record from the database based on the provided data.
+     *
+     * @param array $data An associative array containing the criteria for deletion.
+     *
+     * @return void
+     */
+    public function delete(array $data): void;
 }

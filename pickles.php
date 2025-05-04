@@ -52,6 +52,24 @@ switch ($command) {
         $migrator->migrate();
         break;
 
+    case "rollback":
+        $steps = null;
+
+        if ($argc > 2) {
+            if ($argv[2] == "--steps" && is_numeric($argv[3])) {
+                $steps = (int)$argv[3];
+            } elseif ($argv[2] == "--all") {
+                $steps = null;
+            } else {
+                echo "Usage: php pickles.php rollback --steps <number_of_steps>\n";
+                echo "or: php pickles.php rollback --all\n";
+                exit(1);
+            }
+        }
+
+        $migrator->rollback($steps);
+        break;
+
     default:
         echo "Unknown command: $command\n";
         exit(1);

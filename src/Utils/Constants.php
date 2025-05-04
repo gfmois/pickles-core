@@ -49,4 +49,6 @@ class Constants
      * @var string
      */
     public const FRAMEWORK_SESSION_ID_KEY = "__pickles_sid";
+
+    public const MIGRATIONS_TABLE_NAME = "migrations";
 }

@@ -168,11 +168,27 @@ class PdoDriver implements DatabaseDriver
         return $this->statement($query, array_values($data ?? []));
     }
 
+    /**
+     * @inheritDoc
+     */
     public function insert(array $data): void
     {
         $query = "INSERT INTO {$this->tableToQuery} (";
         $query .= implode(", ", array_keys($data)) . ") VALUES (";
         $query .= implode(", ", array_fill(0, count($data), "?")) . ")";
+
+        $this->statement($query, array_values($data));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete(array $data): void
+    {
+        $query = "DELETE FROM {$this->tableToQuery}";
+        if ($data !== null && !empty($data)) {
+            $query .= " WHERE " . implode(" AND ", array_map(fn ($key) => "$key = ?", array_keys($data)));
+        }
 
         $this->statement($query, array_values($data));
     }

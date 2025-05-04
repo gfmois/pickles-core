@@ -2,6 +2,7 @@
 
 namespace Pickles\Database\Migrations;
 
+use Constants;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Utils\FileUtils;
 use RuntimeException;
@@ -49,7 +50,7 @@ class Migrator
     public function migrate(): void
     {
         $this->createMigrationTable();
-        $migrated = $this->databaseDriver->table(table: 'migrations')->get();
+        $migrated = $this->databaseDriver->table(Constants::MIGRATIONS_TABLE_NAME)->get();
         $migrations = $this->getAllMigrations();
 
         if (count($migrated) >= count($migrations)) {
@@ -67,10 +68,54 @@ class Migrator
 
             $migration->up();
             $migrationName = str_replace('.php', '', basename($migrationFile));
-            $this->databaseDriver->table('migrations')->insert([
+            $this->databaseDriver->table(Constants::MIGRATIONS_TABLE_NAME)->insert([
                 'migration_name' => $migrationName
             ]);
             $this->log("Migrated: $migrationName successfully");
+        }
+    }
+
+    /**
+     * Rollback the last database migration(s).
+     *
+     * @param int|null $steps The number of migrations to rollback. If null, it will rollback the last batch.
+     * @return void
+     */
+    public function rollback(?int $steps = null): void
+    {
+        $this->createMigrationTable();
+        $migrated = $this->databaseDriver->table(Constants::MIGRATIONS_TABLE_NAME)->get();
+        $pendingCount = count($migrated);
+
+        if ($pendingCount === 0) {
+            $this->log("Nothing to rollback");
+            return;
+        }
+
+        if ($steps === null || $steps > $pendingCount) {
+            $steps = $pendingCount;
+        }
+
+        $migrations = array_reverse($this->getAllMigrations());
+        $migrations = array_slice($migrations, -$pendingCount, $steps);
+
+        foreach ($migrations as $migrationFile) {
+            $migration = require $migrationFile;
+            if (!$migration instanceof Migration) {
+                $this->log("Invalid migration file: $migrationFile");
+                continue;
+            }
+
+            $migration->down();
+            $migrationName = str_replace('.php', '', basename($migrationFile));
+            $this->databaseDriver->table(Constants::MIGRATIONS_TABLE_NAME)->delete([
+                'migration_name' => $migrationName
+            ]);
+            $this->log("Rolled back: $migrationName successfully");
+
+            if (--$steps == 0) {
+                break;
+            }
         }
     }
 

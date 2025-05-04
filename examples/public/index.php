@@ -1,13 +1,11 @@
 <?php
 
-use Pickles\Database\DB;
 use Pickles\Database\Model;
 use Pickles\Http\Middleware;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
 use Pickles\Kernel;
 use Pickles\Routing\Route;
-use Pickles\Validation\Rule;
 use Pickles\Validation\Rules\Required;
 use Pickles\View\PicklesEngine;
 

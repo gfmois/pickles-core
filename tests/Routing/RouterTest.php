@@ -112,7 +112,7 @@ class RouterTest extends TestCase
         $expectedResponse = Response::text("test");
 
         $route = $router->get($uri, fn () => $expectedResponse);
-        $route->setMiddlewares([$middleware1, $middleware2]);
+        $route->setMiddlewares([$middleware1::class, $middleware2::class]);
 
         foreach ($route->getMiddlewares() as $key => $middleware) {
             $middleware->setConfiguration("x-testing-middlewares-{$key}", "Working-{$key}");
@@ -143,7 +143,7 @@ class RouterTest extends TestCase
         $route = $router->get(
             $uri,
             fn (Request $request) => $unreachableResponse
-        )->setMiddlewares([$breakMiddleware, $middleware]);
+        )->setMiddlewares([$breakMiddleware::class, $middleware::class]);
 
         $route->getMiddlewares()[1]->setConfiguration('x-test', 'working');
 

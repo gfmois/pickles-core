@@ -152,7 +152,7 @@ Route::POST("/users", function (Request $request) {
 
 Route::GET("/users/first", function (Request $request) {
     return json([
-        "result" => User::first()->toArray(),
+        "result" => User::firstWhere(column: "name", value: "moises")?->toArray(),
     ]);
 });
 
@@ -166,7 +166,7 @@ Route::GET("/users/where", function (Request $request) {
 Route::GET("/users/{id}", function (Request $request) {
     $id = $request->getRouteParameters()["id"] ?? null;
     return json([
-        "result" => User::find($id)->toArray(),
+        "result" => User::find($id)?->toArray(),
     ]);
 });
 

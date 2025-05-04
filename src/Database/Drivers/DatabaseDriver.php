@@ -37,4 +37,32 @@ interface DatabaseDriver
      * @return mixed The result of the query execution, format depends on the implementation.
      */
     public function statement(string $query, array $bind = []): mixed;
+
+    /**
+     * Sets the table name for the database query.
+     *
+     * @param string $table The name of the table to interact with.
+     * @return static Returns the current instance for method chaining.
+     */
+    public function table(string $table): static;
+
+    /**
+     * Retrieves data from the database based on the provided criteria.
+     *
+     * @param array|null $data Optional associative array of criteria to filter the data.
+     *                         If null, retrieves all data.
+     * @return array An array of results matching the criteria.
+     */
+    public function get(?array $data = null): array;
+
+    /**
+     * Inserts a new record into the database.
+     *
+     * @param array $data An associative array containing the data to be inserted,
+     *                    where the keys represent column names and the values
+     *                    represent the corresponding values to be stored.
+     *
+     * @return void
+     */
+    public function insert(array $data): void;
 }

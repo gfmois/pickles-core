@@ -1,7 +1,6 @@
 <?php
 
 use Pickles\Database\Drivers\DatabaseDriver;
-use Pickles\Kernel;
 
 /**
  * Retrieves the database driver instance from the application kernel.
@@ -11,10 +10,10 @@ use Pickles\Kernel;
  */
 function db(): DatabaseDriver
 {
-    $appInstance = app();
-    if (!$appInstance instanceof Kernel) {
+    $databaseDriverInstance = app(DatabaseDriver::class);
+    if (!$databaseDriverInstance instanceof DatabaseDriver) {
         throw new \Exception("The application instance is not a Kernel instance.");
     }
 
-    return $appInstance->database;
+    return $databaseDriverInstance;
 }

@@ -17,20 +17,28 @@ function app(string $class = Kernel::class)
     return Container::resolve($class);
 }
 
+
 /**
- * Retrieves (or creates new one if doesn't exists) a singleton instance of the specified class from the container.
+ * Registers or retrieves a singleton instance of a class in the container.
  *
- * @param string $class The fully qualified class name to retrieve as a singleton.
+ * This function ensures that only one instance of the specified class is created
+ * and shared throughout the application. If a callable or a specific build logic
+ * is provided, it will be used to construct the instance.
  *
- * @throws InvalidArgumentException If the class name is null or empty.
+ * @param string $class The fully qualified class name to register or retrieve as a singleton.
+ * @param string|callable|null $build Optional. A callable or a string representing the logic
+ *                                    to build the instance. If null, the default constructor
+ *                                    will be used.
+ *
+ * @throws InvalidArgumentException If the class name is null or an empty string.
  *
  * @return mixed The singleton instance of the specified class.
  */
-function singleton(string $class)
+function singleton(string $class, string|callable|null $build = null)
 {
     if ($class === null || $class === "") {
         throw new InvalidArgumentException('Class name cannot be null or empty.');
     }
 
-    return Container::singleton($class);
+    return Container::singleton($class, $build);
 }

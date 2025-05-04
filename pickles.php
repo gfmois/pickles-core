@@ -2,6 +2,8 @@
 
 require_once './vendor/autoload.php';
 
+use Pickles\Database\Drivers\DatabaseDriver;
+use Pickles\Database\Drivers\PdoDriver;
 use Pickles\Database\Migrations\Migrator;
 
 // This file is part of the Pickles framework.
@@ -25,21 +27,32 @@ if ($command == '') {
     exit(1);
 }
 
+$databaseDriver = singleton(DatabaseDriver::class, PdoDriver::class);
+$databaseDriver->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
+
 $migrator = new Migrator(
     migrationsDir: __DIR__ . "/database/migrations",
-    templateDir: __DIR__ . "/templates"
+    templateDir: __DIR__ . "/templates",
+    databaseDriver: $databaseDriver
 );
 
-if ($command == "make:migration") {
-    $migrationName = $argv[2] ?? null;
-    if ($migrationName === null) {
-        echo "Usage: php pickles.php make:migration <migration_name>\n";
-        exit(1);
-    }
+switch ($command) {
+    case "make:migration":
+        $migrationName = $argv[2] ?? null;
+        if ($migrationName === null) {
+            echo "Usage: php pickles.php make:migration <migration_name>\n";
+            exit(1);
+        }
 
-    echo "Creating migration file for $migrationName...\n";
-    $migrator->make($migrationName);
-} else {
-    echo "Unknown command: $command\n";
-    exit(1);
+        echo "Creating migration file for $migrationName...\n";
+        $migrator->make($migrationName);
+        break;
+
+    case "migrate":
+        $migrator->migrate();
+        break;
+
+    default:
+        echo "Unknown command: $command\n";
+        exit(1);
 }

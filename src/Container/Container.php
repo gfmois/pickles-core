@@ -11,20 +11,32 @@ class Container
 {
     private static array $instances = [];
 
+
     /**
-     * Retrieves a singleton instance of the specified class.
+     * Retrieves or creates a singleton instance of the specified class.
      *
-     * This method ensures that only one instance of the given class is created
-     * and reused throughout the application. If an instance of the class does
-     * not already exist, it will be instantiated and stored.
+     * This method ensures that only one instance of the specified class is created
+     * and reused throughout the application. If the instance does not already exist,
+     * it will be created based on the provided build parameter.
      *
-     * @param string $class The fully qualified class name of the object to retrieve.
+     * @param string $class The fully qualified class name of the singleton instance to retrieve or create.
+     * @param string|callable|null $build Optional. A parameter to customize the instance creation:
+     *                                    - If null, the class is instantiated with no arguments.
+     *                                    - If a string, the class is instantiated with the string as a constructor argument.
+     *                                    - If a callable, the callable is invoked to create the instance.
      * @return object The singleton instance of the specified class.
+     *
+     * @throws \InvalidArgumentException If the build parameter is of an invalid type.
      */
-    public static function singleton(string $class): object
+    public static function singleton(string $class, string|callable|null $build = null): object
     {
         if (!isset(self::$instances[$class])) {
-            self::$instances[$class] = new $class();
+            match (true) {
+                ($build === null) =>  self::$instances[$class] = new $class(),
+                is_string($build) => self::$instances[$class] = new $build(),
+                is_callable($build) => self::$instances[$class] = $build(),
+                default => throw new \InvalidArgumentException('Invalid build type provided.'),
+            };
         }
 
         return self::$instances[$class];

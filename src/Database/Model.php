@@ -177,12 +177,7 @@ abstract class Model
     public function save(): static
     {
         $this->checkTimestamps();
-        $columns = implode(", ", array_keys($this->attributes));
-        $values = array_values($this->attributes);
-        $bind = implode(", ", array_fill(0, count($this->attributes), '?'));
-
-        $query = "INSERT INTO {$this->table} ({$columns}) VALUES ({$bind})";
-        self::$driver->statement($query, $values);
+        self::$driver->table($this->table)->insert($this->attributes);
 
         return $this;
     }
@@ -196,7 +191,7 @@ abstract class Model
     public static function first(): ?static
     {
         $model = new static();
-        $rows = self::$driver->statement("SELECT * FROM " . $model->table . " LIMIT 1");
+        $rows = self::$driver->table($model->table)->get(["LIMIT" => 1]);
 
         if (count($rows) === 0) {
             return null;
@@ -215,10 +210,7 @@ abstract class Model
     public static function firstWhere(string $column, mixed $value): ?static
     {
         $model = new static();
-        $rows = self::$driver->statement(
-            "SELECT * FROM $model->table WHERE $column = ? LIMIT 1",
-            [$value]
-        );
+        $rows = self::$driver->table($model->table)->get([$column => $value, "LIMIT" => 1]);
 
         if (count($rows) == 0) {
             return null;
@@ -236,7 +228,7 @@ abstract class Model
     public static function find(int|string $id): ?static
     {
         $model = new static();
-        $rows = self::$driver->statement("SELECT * FROM $model->table WHERE $model->primaryKey = ?", [$id]);
+        $rows = self::$driver->table($model->table)->get([$model->primaryKey => $id]);
 
         if (count($rows) === 0) {
             return null;
@@ -253,7 +245,7 @@ abstract class Model
     public static function all(): array
     {
         $model = new static();
-        $rows = self::$driver->statement("SELECT * FROM $model->table");
+        $rows = self::$driver->table($model->table)->get();
 
         if (count($rows) === 0) {
             return [];
@@ -275,7 +267,6 @@ abstract class Model
         if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $column)) {
             throw new \InvalidArgumentException("Invalid column name: $column");
         }
-
 
         $rows = self::$driver->statement("SELECT * FROM $model->table WHERE $column $operator ?", [$value]);
 

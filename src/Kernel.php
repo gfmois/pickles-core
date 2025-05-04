@@ -87,7 +87,8 @@ class Kernel
         $instance->request = $instance->server->getRequest();
         $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
         $instance->session = new Session(new PhpNativeSessionStorage());
-        $instance->database = new PdoDriver();
+        $instance->database = singleton(DatabaseDriver::class, PdoDriver::class);
+        ;
         $instance->database->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
 
         Model::setDatabaseDriver($instance->database);

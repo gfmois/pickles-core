@@ -2,6 +2,7 @@
 
 namespace Pickles\Tests\Database;
 
+use PDOException;
 use PHPUnit\Framework\TestCase;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Migrations\Migrator;
@@ -30,6 +31,7 @@ class MigrationsTest extends TestCase
             $this->migrationsDir,
             $this->templatesDir,
             $this->databaseDriver,
+            false
         );
     }
 
@@ -65,5 +67,35 @@ class MigrationsTest extends TestCase
 
         $this->assertFileExists($file);
         $this->assertFileEquals($expectedMigration, $file);
+    }
+
+    /**
+     * @depends test_creates_migration_file
+     */
+    public function test_migrate_files()
+    {
+        $tables = ["users", "products", "sellers"];
+        $migrated = [];
+
+        foreach ($tables as $table) {
+            $migrationName = $this->migrator->make("create_{$table}_table");
+            $migrationName = str_replace(".php", "", $migrationName);
+            $migrated[] = $migrationName;
+        }
+
+        $this->migrator->migrate();
+
+        $rows = $this->databaseDriver->statement("SELECT * FROM migrations");
+
+        $this->assertEquals(3, count($rows));
+        $this->assertEquals($migrated, array_column($rows, "migration_name"));
+
+        foreach ($tables as $table) {
+            try {
+                $this->databaseDriver->table($table)->get();
+            } catch (PDOException $e) {
+                $this->fail("Failed accessing migrated table $table: {$e->getMessage()}");
+            }
+        }
     }
 }

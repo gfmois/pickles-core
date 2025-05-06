@@ -19,11 +19,13 @@ class Migrator
     public function __construct(
         private string $migrationsDir,
         private string $templateDir,
-        private DatabaseDriver $databaseDriver
+        private DatabaseDriver $databaseDriver,
+        private bool $logProgress = true,
     ) {
         $this->migrationsDir = $migrationsDir;
         $this->templateDir = $templateDir;
         $this->databaseDriver = $databaseDriver;
+        $this->logProgress = $logProgress;
 
         FileUtils::ensureDirectoryExists($this->migrationsDir);
     }
@@ -139,9 +141,10 @@ class Migrator
      * - For other cases, it comments out any `DB::statement` lines in the template.
      * - Generates the migration file and outputs its file path.
      *
+     * @return string The name of the created migration file.
      * @throws RuntimeException If the template file cannot be loaded or the migration file cannot be created.
      */
-    public function make(string $migrationName): void
+    public function make(string $migrationName): string
     {
         $migrationName = snake_case($migrationName);
         $template = file_get_contents("$this->templateDir/migration.php");
@@ -157,8 +160,10 @@ class Migrator
             $template = preg_replace_callback("/DB::statement.*/", fn ($matches) => "// {$matches[0]}", $template);
         }
 
-        $filePath = $this->generateMigrationFile($migrationName, $template);
-        echo "Migration file created at $filePath\n";
+        [$fileName, $filePath] = $this->generateMigrationFile($migrationName, $template);
+        $this->log("Migration file created: $fileName");
+
+        return $fileName;
     }
 
     /**
@@ -179,9 +184,9 @@ class Migrator
      *
      * @param string $migrationName The name of the migration to be created.
      * @param string $template The template content to be used for the migration file.
-     * @return string The file path of the newly created migration file.
+     * @return array<string> Returns an array containing the file name and the full path of the created migration file.
      */
-    private function generateMigrationFile(string $migrationName, string $template): string
+    private function generateMigrationFile(string $migrationName, string $template): array
     {
         $date = date('Y_m_d_');
         $id = $this->getIdForMigrationFile($date);
@@ -191,7 +196,7 @@ class Migrator
 
         file_put_contents($path, $template);
 
-        return $path;
+        return [$fileName, $path];
     }
 
     /**
@@ -249,6 +254,8 @@ class Migrator
      */
     private function log(string $message): void
     {
-        printf("%s\n", $message);
+        if ($this->logProgress) {
+            printf("%s\n", $message);
+        }
     }
 }

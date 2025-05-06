@@ -6,11 +6,11 @@ use Pickles\Database\Migrations\Migration;
 return new class () implements Migration {
     public function up()
     {
-        DB::statement('CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY);');
+        DB::statement('ALTER TABLE users');
     }
 
     public function down()
     {
-        DB::statement('DROP TABLE products;');
+        DB::statement('ALTER TABLE users');
     }
 };

@@ -44,20 +44,26 @@ class MigrationsTest extends TestCase
         return [
             [
                 "create_products_table",
-                "$this->migrationsDir/create_products_table.php"
-            ]
+                "$this->expectedMigrationsDir/create_products_table.php",
+            ],
+            [
+                "modify_column_from_users_table",
+                "$this->expectedMigrationsDir/modify_column_from_users_table.php",
+            ],
         ];
     }
 
-    // /**
-    //  * @dataProvider getMigrationNames
-    //  */
-    // public function test_creates_migration_file($name, $expectedMigration): void
-    // {
-    //     $exoectedName = sprintf("%s_%06d_%s.php", date("Y_m_d"), 0, $name);
-    //     $this->migrator->make($name);
+    /**
+     * @dataProvider getMigrationNames
+     */
+    public function test_creates_migration_file($name, $expectedMigration): void
+    {
+        $expectedName = sprintf("%s_%06d_%s.php", date('Y_m_d_'), 0, $name);
+        $this->migrator->make($name);
 
-    //     $this->assertFileExists("$this->migrationsDir/$exoectedName");
-    //     $this->assertFileEquals($expectedMigration, "$this->migrationsDir/$exoectedName");
-    // }
+        $file = "$this->migrationsDir/$expectedName";
+
+        $this->assertFileExists($file);
+        $this->assertFileEquals($expectedMigration, $file);
+    }
 }

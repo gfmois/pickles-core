@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class StringHelperTest extends TestCase
 {
-    public static function getStrings()
+    public function getStrings()
     {
         return [
             [
@@ -37,7 +37,7 @@ class StringHelperTest extends TestCase
         ];
     }
 
-    #[DataProvider("getStrings")]
+    /** @dataProvider getStrings */
     public function testSnakeCase($test, $expected)
     {
         $this->assertEquals($expected, snake_case($test));

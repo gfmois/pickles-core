@@ -22,26 +22,8 @@ class MockModelFillable extends MockModel
 
 class ModelTest extends TestCase
 {
+    use RefreshDatabase;
     protected ?DatabaseDriver $databaseDriver = null;
-
-    protected function setUp(): void
-    {
-        if ($this->databaseDriver === null) {
-            $this->databaseDriver = new PdoDriver();
-            Model::setDatabaseDriver($this->databaseDriver);
-            try {
-                $this->databaseDriver->connect("mysql", "127.0.0.1", 3306, "root", "1234", "test");
-            } catch (PDOException $e) {
-                $this->markTestSkipped("Database connection failed: {$e->getMessage()}");
-            }
-        }
-    }
-
-    protected function tearDown(): void
-    {
-        $this->databaseDriver->statement("DROP DATABASE IF EXISTS test");
-        $this->databaseDriver->statement("CREATE DATABASE test");
-    }
 
     private function createTestTable($name, $columns, $withTimestamps = true): void
     {

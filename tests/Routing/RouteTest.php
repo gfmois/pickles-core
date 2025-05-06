@@ -8,7 +8,7 @@ use Pickles\Routing\Route;
 
 class RouteTest extends TestCase
 {
-    public static function getRoutesWithNoParameters(): array
+    public function getRoutesWithNoParameters(): array
     {
         return [
             ['/'],
@@ -19,7 +19,7 @@ class RouteTest extends TestCase
         ];
     }
 
-    public static function getRoutesWithParameters(): array
+    public function getRoutesWithParameters(): array
     {
         return [
             ['/test/{test}', "/test/1", ["test" => 1]],
@@ -32,7 +32,7 @@ class RouteTest extends TestCase
         ];
     }
 
-    #[DataProvider("getRoutesWithNoParameters")]
+    /** @dataProvider getRoutesWithNoParameters */
     public function test_regex_without_parameters(string $uri)
     {
         $route = new Route($uri, fn () => "test");
@@ -43,7 +43,7 @@ class RouteTest extends TestCase
         $this->assertFalse($route->matches("/random"));
     }
 
-    #[DataProvider("getRoutesWithParameters")]
+    /** @dataProvider getRoutesWithParameters */
     public function test_regex_with_parameters(string $definition, string $uri)
     {
         $route = new Route($definition, fn () => "test");
@@ -54,14 +54,14 @@ class RouteTest extends TestCase
         $this->assertFalse($route->matches("/random"));
     }
 
-    #[DataProvider("getRoutesWithNoParameters")]
+    /** @dataProvider getRoutesWithNoParameters */
     public function test_regex_on_uri_that_ends_with_slash(string $uri)
     {
         $route = new Route($uri, fn () => "test");
         $this->assertTrue($route->matches("$uri/"));
     }
 
-    #[DataProvider("getRoutesWithParameters")]
+    /** @dataProvider getRoutesWithParameters */
     public function test_parse_parameters(string $definition, string $uri, array $expectedParameters)
     {
         $route = new Route($definition, fn () => "asdf");

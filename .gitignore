@@ -4,3 +4,5 @@ composer.lock
 *.cache
 *.zip
 database
+bin
+bin/*

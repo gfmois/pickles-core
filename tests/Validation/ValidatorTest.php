@@ -54,7 +54,7 @@ class ValidatorTest extends TestCase
         $v->validate(["test" => new Number()]);
     }
 
-    #[Depends("test_basic_validation_passes")]
+    /** @depends test_basic_validation_passes */
     public function test_multiple_rules_validation()
     {
         $data = ["age" => 20, "num" => 3, "foo" => 5];

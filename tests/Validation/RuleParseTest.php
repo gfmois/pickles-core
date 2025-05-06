@@ -21,7 +21,7 @@ class RuleParseTest extends TestCase
         Rule::loadDefaults();
     }
 
-    public static function getBasicRules()
+    public function getBasicRules()
     {
         return [
             [Email::class, "email"],
@@ -30,7 +30,7 @@ class RuleParseTest extends TestCase
         ];
     }
 
-    #[DataProvider("getBasicRules")]
+    /** @dataProvider getBasicRules */
     public function test_parse_basic_rules($class, $name)
     {
         $this->assertInstanceOf($class, Rule::from($name));
@@ -51,7 +51,7 @@ class RuleParseTest extends TestCase
         ];
     }
 
-    #[DataProvider("getRulesWithParameters")]
+    /** @dataProvider getRulesWithParameters */
     public function test_parse_rules_with_parameters($expected, $rule)
     {
         $this->assertEquals($expected, Rule::from($rule));
@@ -72,7 +72,7 @@ class RuleParseTest extends TestCase
         ];
     }
 
-    #[DataProvider("getRulesWithParametersWithError")]
+    /** @dataProvider getRulesWithParametersWithError */
     public function test_parsing_rule_with_parameters_without_passing_correct_parameters_throws_rule_parse_exception($rule)
     {
         $this->expectException(RuleParseException::class);

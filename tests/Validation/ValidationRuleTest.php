@@ -2,7 +2,7 @@
 
 namespace Pickles\Tests\Validation;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\dataProvider;
 use PHPUnit\Framework\TestCase;
 use Pickles\Validation\Exceptions\UnknownOperatorException;
 use Pickles\Validation\Rule;
@@ -12,7 +12,7 @@ use Pickles\Validation\Rules\RequiredWhen;
 
 class ValidationRuleTest extends TestCase
 {
-    public static function getEmails(): array
+    public function getEmails(): array
     {
         return [
             ["test@example.com", true],
@@ -26,7 +26,7 @@ class ValidationRuleTest extends TestCase
         ];
     }
 
-    public static function getRequiredData(): array
+    public function getRequiredData(): array
     {
         return [
             ["", false],
@@ -39,7 +39,7 @@ class ValidationRuleTest extends TestCase
         ];
     }
 
-    public static function getLessThanData()
+    public function getLessThanData()
     {
         return [
             [5, 5, false],
@@ -51,7 +51,7 @@ class ValidationRuleTest extends TestCase
         ];
     }
 
-    public static function getNumbers()
+    public function getNumbers()
     {
         return [
             [0, true],
@@ -72,7 +72,7 @@ class ValidationRuleTest extends TestCase
         ];
     }
 
-    public static function getRequiredWhenData()
+    public function getRequiredWhenData()
     {
         return [
             ["other", "=", "value", ["other" => "value"], "test", false],
@@ -84,7 +84,9 @@ class ValidationRuleTest extends TestCase
         ];
     }
 
-    #[DataProvider("getEmails")]
+    /**
+     * @dataProvider getEmails
+    */
     public function test_email($email, $expected)
     {
         $data = ["email" => $email];
@@ -93,7 +95,9 @@ class ValidationRuleTest extends TestCase
         $this->assertEquals($expected, $rule->validate("email", $data));
     }
 
-    #[DataProvider("getRequiredData")]
+    /**
+     * @dataProvider getRequiredData
+    */
     public function test_required($value, $expected)
     {
         $data = ["test" => $value];
@@ -112,7 +116,7 @@ class ValidationRuleTest extends TestCase
         $this->assertFalse($rule->validate("test", $data));
     }
 
-    #[DataProvider("getLessThanData")]
+    /** @dataProvider getLessThanData */
     public function test_less_than($value, $check, $expected)
     {
         $rule = new LessThan($value);
@@ -120,7 +124,7 @@ class ValidationRuleTest extends TestCase
         $this->assertEquals($expected, $rule->validate("test", $data));
     }
 
-    #[DataProvider("getNumbers")]
+    /** @dataProvider getNumbers */
     public function test_number($n, $expected)
     {
         $rule = new Number();
@@ -128,7 +132,7 @@ class ValidationRuleTest extends TestCase
         $this->assertEquals($expected, $rule->validate("test", $data));
     }
 
-    #[DataProvider("getRequiredWhenData")]
+    /** @dataProvider getRequiredWhenData */
     public function test_required_when($other, $operator, $compareWith, $data, $field, $expected)
     {
         $rule = new RequiredWhen($other, $operator, $compareWith);

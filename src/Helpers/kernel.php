@@ -1,5 +1,6 @@
 <?php
 
+use Pickles\Config\Config;
 use Pickles\Container\Container;
 use Pickles\Kernel;
 
@@ -41,4 +42,45 @@ function singleton(string $class, string|callable|null $build = null)
     }
 
     return Container::singleton($class, $build);
+}
+
+/**
+ * Retrieves the value of an environment variable.
+ *
+ * This function checks the `$_ENV` superglobal for the specified variable
+ * and returns its value if it exists. If the variable is not set, the
+ * provided default value will be returned instead.
+ *
+ * @param string $var The name of the environment variable to retrieve.
+ * @param mixed $default The default value to return if the environment variable is not set. Defaults to null.
+ * @return mixed The value of the environment variable, or the default value if the variable is not set.
+ */
+function env(string $var, mixed $default = null): mixed
+{
+    return $_ENV[$var] ?? $default;
+}
+
+/**
+ * Retrieves the path to the resources directory.
+ *
+ * @return string The absolute path to the resources directory.
+ */
+function resourcesDirectory(): string
+{
+    return Kernel::$root . '/resources';
+}
+
+/**
+ * Retrieve a configuration value by its key.
+ *
+ * This function fetches a configuration value from the application's configuration
+ * repository. If the specified key does not exist, a default value can be returned.
+ *
+ * @param string $key The configuration key to retrieve.
+ * @param mixed $default The default value to return if the key does not exist. Defaults to null.
+ * @return mixed The configuration value associated with the key, or the default value if the key does not exist.
+ */
+function config(string $key, mixed $default = null): mixed
+{
+    return Config::get($key, $default);
 }

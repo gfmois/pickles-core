@@ -11,7 +11,7 @@ use Pickles\View\PicklesEngine;
 
 require_once '../../vendor/autoload.php';
 
-$app = Kernel::bootstrap();
+$app = Kernel::bootstrap(__DIR__ . "/../..");
 $engine = $app->getViewEngine();
 if (!$engine instanceof PicklesEngine) {
     throw new \RuntimeException("The view engine is not an instance of PicklesEngine.");
@@ -173,6 +173,12 @@ Route::GET("/users/{id}", function (Request $request) {
 Route::GET("/users", function (Request $request) {
     return json([
         "result" => User::mapModelsToObjects(User::all()),
+    ]);
+});
+
+Route::GET("/env", function (Request $request) {
+    return json([
+        "result" => config("database.database")
     ]);
 });
 

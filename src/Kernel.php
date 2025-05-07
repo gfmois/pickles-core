@@ -3,6 +3,8 @@
 namespace Pickles;
 
 use Constants;
+use Dotenv\Dotenv;
+use Pickles\Config\Config;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Drivers\PdoDriver;
 use Pickles\Database\Model;
@@ -33,6 +35,7 @@ use Throwable;
  */
 class Kernel
 {
+    public static string $root;
     /**
      * The router instance responsible for handling route definitions and dispatching.
      *
@@ -79,8 +82,11 @@ class Kernel
      *
      * @return self Returns the singleton instance of the Kernel class.
      */
-    public static function bootstrap()
+    public static function bootstrap(string $root)
     {
+        self::$root = $root;
+        Dotenv::createImmutable($root)->load();
+        Config::load($root . "/config");
         $instance = singleton(self::class);
         $instance->router = new Router();
         $instance->server = new PhpNativeServer();

@@ -6,3 +6,4 @@ composer.lock
 database
 bin
 bin/*
+.env

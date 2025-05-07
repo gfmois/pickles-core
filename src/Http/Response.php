@@ -4,6 +4,8 @@ namespace Pickles\Http;
 
 use Constants;
 use Pickles\Kernel;
+use Pickles\View\Engine;
+use Pickles\View\PicklesEngine;
 
 /**
  * Class Response
@@ -219,12 +221,12 @@ class Response
      */
     public static function view(string $view, array $params = [], ?string $layout = null): self
     {
-        $kernel = app();
-        if (!$kernel instanceof Kernel) {
-            throw new \RuntimeException("Resolved instance is not of type Kernel.");
+        $viewEngine = app(PicklesEngine::class);
+        if (!$viewEngine instanceof Engine) {
+            throw new \RuntimeException("Resolved instance is not of type Engine.");
         }
 
-        $content = $kernel->getViewEngine()->render($view, $params, $layout);
+        $content = $viewEngine->render($view, $params, $layout);
         return (new self())
             ->setContentType("text/html")
             ->setContent($content);

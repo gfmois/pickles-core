@@ -6,21 +6,19 @@ use Constants;
 use Dotenv\Dotenv;
 use Pickles\Config\Config;
 use Pickles\Database\Drivers\DatabaseDriver;
-use Pickles\Database\Drivers\PdoDriver;
 use Pickles\Database\Model;
 use Pickles\Http\HttpMethod;
 use Pickles\Http\Exceptions\HttpNotFoundException;
 use Pickles\Http\Request;
 use Pickles\Http\Response;
+use Pickles\Providers\Exceptions\InvalidServiceProviderException;
+use Pickles\Providers\ServiceProvider;
 use Pickles\Routing\Router;
-use Pickles\Server\PhpNativeServer;
 use Pickles\Server\Server;
-use Pickles\Session\PhpNativeSessionStorage;
 use Pickles\Session\Session;
+use Pickles\Session\SessionStorage;
 use Pickles\Validation\Exceptions\ValidationException;
-use Pickles\Validation\Rule;
 use Pickles\View\Engine;
-use Pickles\View\PicklesEngine;
 use ReflectionClass;
 use Throwable;
 
@@ -74,33 +72,118 @@ class Kernel
 
     public DatabaseDriver $database;
 
+
     /**
-     * Bootstraps the application by initializing and configuring core components.
+     * Bootstraps the application by initializing the root directory,
+     * loading configuration, running service providers, setting up HTTP handlers,
+     * establishing a database connection, and running runtime service providers.
      *
-     * Creates a singleton instance of the Kernel class, sets up the
-     * router, server, and request objects, and returns the initialized instance.
-     *
-     * @return self Returns the singleton instance of the Kernel class.
+     * @param string $root The root directory of the application.
+     * @return self Returns the instance of the Kernel after bootstrapping.
      */
     public static function bootstrap(string $root)
     {
         self::$root = $root;
-        Dotenv::createImmutable($root)->load();
-        Config::load($root . "/config");
         $instance = singleton(self::class);
-        $instance->router = new Router();
-        $instance->server = new PhpNativeServer();
-        $instance->request = $instance->server->getRequest();
-        $instance->viewEngine = new PicklesEngine(__DIR__ . "/../views");
-        $instance->session = new Session(new PhpNativeSessionStorage());
-        $instance->database = singleton(DatabaseDriver::class, PdoDriver::class);
-        ;
-        $instance->database->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
 
-        Model::setDatabaseDriver($instance->database);
-        Rule::loadDefaults();
+        return $instance
+            ->loadConfig()
+            ->runServiceProviders(Constants::BOOT_PROVIDERS)
+            ->setHttpHandlers()
+            ->setUpDatabaseConnection()
+            ->runServiceProviders(Constants::RUNTIME_PROVIDERS);
+    }
 
-        return $instance;
+    /**
+     * Loads the application configuration.
+     *
+     * This method initializes the environment variables using the Dotenv library
+     * and loads the application configuration files from the specified directory.
+     *
+     * @return self Returns the current instance for method chaining.
+     */
+    protected function loadConfig(): self
+    {
+        Dotenv::createImmutable(self::$root)->load();
+        Config::load(self::$root . "/config");
+
+        return $this;
+    }
+
+    /**
+     * Executes the service providers of the specified type.
+     *
+     * This method iterates through the list of service providers defined in the configuration
+     * for the given type, instantiates each provider, and ensures it implements the 
+     * ServiceProvider interface. If a provider does not implement the required interface, 
+     * an InvalidServiceProviderException is thrown. Each valid provider's `registerServices` 
+     * method is then called.
+     *
+     * @param string $type The type of service providers to execute ("boot" or "runtime").
+     * @return self Returns the current instance for method chaining.
+     * @throws InvalidServiceProviderException If a provider does not implement the ServiceProvider interface.
+     */
+    protected function runServiceProviders(string $type): self
+    {
+        foreach (config("providers.$type", []) as $provider) {
+            $provider = new $provider();
+            if (!$provider instanceof ServiceProvider) {
+                throw new InvalidServiceProviderException("ServiceProvider $provider does not implements ServiceProvider.");
+            }
+
+            $provider->registerServices();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets up the HTTP handlers for the application.
+     *
+     * This method initializes and assigns the following components:
+     * - Router: A singleton instance of the Router class.
+     * - Server: An application instance of the Server class.
+     * - Request: The current HTTP request obtained from the server.
+     * - Session: A singleton instance of the Session class, initialized with a
+     *   SessionStorage instance.
+     *
+     * @return self Returns the current instance for method chaining.
+     */
+    protected function setHttpHandlers(): self
+    {
+        $this->router = singleton(Router::class);
+        $this->server = app(Server::class);
+        $this->request = $this->server->getRequest();
+        $this->session = singleton(Session::class, fn () => new Session(app(SessionStorage::class)));
+
+        return $this;
+    }
+
+    /**
+     * Sets up the database connection for the application.
+     *
+     * This method initializes the database driver and establishes a connection
+     * using configuration values such as protocol, host, port, username, password,
+     * and database name. It also sets the database driver for the application's
+     * models to ensure consistent database interactions.
+     *
+     * @return self Returns the current instance for method chaining.
+     */
+    protected function setUpDatabaseConnection(): self
+    {
+        $this->database = app(DatabaseDriver::class);
+
+        $this->database->connect(
+            config(Constants::DATABASE_PROTOCOL),
+            config(Constants::DATABASE_HOST),
+            config(Constants::DATABASE_PORT),
+            config(Constants::DATABASE_USERNAME),
+            config(Constants::DATABASE_PASSWORD),
+            config(Constants::DATABASE_DATABASE),
+        );
+        Model::setDatabaseDriver($this->database);
+
+        return $this;
     }
 
     /**

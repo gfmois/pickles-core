@@ -50,5 +50,35 @@ class Constants
      */
     public const FRAMEWORK_SESSION_ID_KEY = "__pickles_sid";
 
+    /**
+     * The name of the database table used to store migration information.
+     *
+     * This constant defines the table name where migration records are stored.
+     * It is used by the framework to track executed migrations.
+     */
     public const MIGRATIONS_TABLE_NAME = "migrations";
+
+    /** Config Constants */
+    // VIEW KEYS
+    public const VIEW_ENGINE = "view.engine";
+    public const VIEW_PATH = "view.path";
+    public const DEFAULT_VIEW_ENGINE = "pickles";
+
+    // SESSION STORAGE KEYS
+    public const SESSION_STORAGE = "session.storage";
+    public const DEFAULT_SESSION_STORAGE = "native";
+
+    // DATABASE KEYS
+    public const DATABASE_PROTOCOL = "database.connection";
+    public const DATABASE_HOST = "database.host";
+    public const DATABASE_PORT = "database.port";
+    public const DATABASE_USERNAME = "database.username";
+    public const DATABASE_PASSWORD = "database.password";
+    public const DATABASE_DATABASE = "database.database";
+    public const DEFAULT_DATABASE_PROTOCOL = "mysql";
+    public const POSTGRES_DATABASE_PROTOCOL = "pgsql";
+    public const MYSQL_DATABASE_PROTOCOL = "mysql";
+
+    public const BOOT_PROVIDERS = "boot";
+    public const RUNTIME_PROVIDERS = "runtime";
 }

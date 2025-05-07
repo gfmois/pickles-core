@@ -32,7 +32,7 @@ $databaseDriver->connect("mysql", "127.0.0.1", 3306, "root", "1234", "pickles");
 
 $migrator = new Migrator(
     migrationsDir: __DIR__ . "/database/migrations",
-    templateDir: __DIR__ . "/templates",
+    templateDir: __DIR__ . "/resources/templates",
     databaseDriver: $databaseDriver
 );
 

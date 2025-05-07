@@ -7,12 +7,13 @@ use Pickles\Http\Response;
 use Pickles\Kernel;
 use Pickles\Routing\Route;
 use Pickles\Validation\Rules\Required;
+use Pickles\View\Engine;
 use Pickles\View\PicklesEngine;
 
 require_once '../../vendor/autoload.php';
 
 $app = Kernel::bootstrap(__DIR__ . "/../..");
-$engine = $app->getViewEngine();
+$engine = app(Engine::class);
 if (!$engine instanceof PicklesEngine) {
     throw new \RuntimeException("The view engine is not an instance of PicklesEngine.");
 }
@@ -181,7 +182,6 @@ Route::GET("/env", function (Request $request) {
         "result" => config("database.database")
     ]);
 });
-
 
 
 $app->run();

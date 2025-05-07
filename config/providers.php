@@ -7,5 +7,8 @@ return [
         Pickles\Providers\SessionStorageServiceProvider::class,
         Pickles\Providers\ViewServiceProvider::class,
     ],
-    "runtime" => [],
+    "runtime" => [
+        App\Providers\RuleServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+    ],
 ];

@@ -17,8 +17,10 @@ class PhpNativeSessionStorage implements SessionStorage
      */
     public function start()
     {
-        if (!session_start()) {
-            throw new \RuntimeException("Failed to start session");
+        if (session_status() === PHP_SESSION_NONE) {
+            if (!@session_start()) {
+                throw new \RuntimeException("Could not start the session: " . error_get_last()['message'] ?? '');
+            }
         }
     }
 
@@ -35,7 +37,7 @@ class PhpNativeSessionStorage implements SessionStorage
      */
     public function get(string $key, $default = null): mixed
     {
-        return  $_SESSION[$key] ?? $default;
+        return $_SESSION[$key] ?? $default;
     }
 
     /**

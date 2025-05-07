@@ -4,6 +4,7 @@ namespace Pickles;
 
 use Constants;
 use Dotenv\Dotenv;
+use Exception;
 use Pickles\Config\Config;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Model;
@@ -20,6 +21,7 @@ use Pickles\Session\SessionStorage;
 use Pickles\Validation\Exceptions\ValidationException;
 use Pickles\View\Engine;
 use ReflectionClass;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -85,6 +87,10 @@ class Kernel
     {
         self::$root = $root;
         $instance = singleton(self::class);
+
+        if (!$instance instanceof Kernel) {
+            throw new Exception("Instance recovered from singleton is not Kernel instance");
+        }
 
         return $instance
             ->loadConfig()
@@ -153,7 +159,7 @@ class Kernel
     {
         $this->router = singleton(Router::class);
         $this->server = app(Server::class);
-        $this->request = $this->server->getRequest();
+        $this->request = singleton(Request::class, fn () => $this->server->getRequest());
         $this->session = singleton(Session::class, fn () => new Session(app(SessionStorage::class)));
 
         return $this;
@@ -181,8 +187,8 @@ class Kernel
             config(Constants::DATABASE_PASSWORD),
             config(Constants::DATABASE_DATABASE),
         );
-        Model::setDatabaseDriver($this->database);
 
+        Model::setDatabaseDriver($this->database);
         return $this;
     }
 
@@ -227,7 +233,7 @@ class Kernel
         try {
             $this->terminate($this->getRouter()->resolve($this->request));
         } catch (HttpNotFoundException $e) {
-            $this->abort(Response::text("Not Found")->setStatus(404));
+            $this->abort(Response::text("Not Found\n")->setStatus(404));
         } catch (ValidationException $e) {
             $this->abort(back()->withErrors($e->getErrors(), 422));
         } catch (Throwable $e) {

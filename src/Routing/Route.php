@@ -209,6 +209,13 @@ class Route
         return $kernel->getRouter()->delete($uri, $action);
     }
 
+    public static function load(string $routesDirectory)
+    {
+        foreach (glob("$routesDirectory/*.php") as $routes) {
+            require_once $routes;
+        }
+    }
+
     /**
      * Get HTTP middlewares associated with this route.
      *

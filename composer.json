@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Pickles\\": "src/"
+            "Pickles\\": "src/",
+            "App\\": "app/"
         },
         "files": [
             "src/Helpers/http.php",

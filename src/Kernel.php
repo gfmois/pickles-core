@@ -114,9 +114,9 @@ class Kernel
      * Executes the service providers of the specified type.
      *
      * This method iterates through the list of service providers defined in the configuration
-     * for the given type, instantiates each provider, and ensures it implements the 
-     * ServiceProvider interface. If a provider does not implement the required interface, 
-     * an InvalidServiceProviderException is thrown. Each valid provider's `registerServices` 
+     * for the given type, instantiates each provider, and ensures it implements the
+     * ServiceProvider interface. If a provider does not implement the required interface,
+     * an InvalidServiceProviderException is thrown. Each valid provider's `registerServices`
      * method is then called.
      *
      * @param string $type The type of service providers to execute ("boot" or "runtime").

@@ -9,6 +9,6 @@ use Pickles\Routing\Route;
 class RouteServiceProvider implements ServiceProvider
 {
     public function registerServices() {
-        Route::load(Kernel::$root . "/rotes");   
+        Route::load(Kernel::$root . "/routes");   
     }
 }

@@ -188,7 +188,7 @@ class Response
     {
         return (new self())
             ->setContentType("text/plain")
-            ->setContent($text);
+            ->setContent($text . PHP_EOL);
     }
 
     /**
@@ -221,7 +221,7 @@ class Response
      */
     public static function view(string $view, array $params = [], ?string $layout = null): self
     {
-        $viewEngine = app(PicklesEngine::class);
+        $viewEngine = app(Engine::class);
         if (!$viewEngine instanceof Engine) {
             throw new \RuntimeException("Resolved instance is not of type Engine.");
         }

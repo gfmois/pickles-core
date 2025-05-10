@@ -24,7 +24,7 @@ class ResponseTest extends TestCase
         $response = Response::text("Hello world!");
         $this->assertEquals(200, $response->getStatus());
         $this->assertEquals('text/plain', $response->getHeaders(HttpHeader::CONTENT_TYPE->value));
-        $this->assertEquals('Hello world!', $response->getContent());
+        $this->assertEquals('Hello world!' . PHP_EOL, $response->getContent());
     }
 
     public function test_redirect_response_is_constructed_correctly()
@@ -48,6 +48,6 @@ class ResponseTest extends TestCase
         $response = Response::text("Hello, world!");
         $response->prepare();
 
-        $this->assertEquals(13, $response->getHeaders(HttpHeader::CONTENT_LENGTH->value));
+        $this->assertEquals(14, $response->getHeaders(HttpHeader::CONTENT_LENGTH->value));
     }
 }

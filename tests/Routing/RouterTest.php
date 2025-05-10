@@ -149,7 +149,7 @@ class RouterTest extends TestCase
 
         $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
 
-        $this->assertEquals("Stopped", $response->getContent());
+        $this->assertEquals("Stopped" . PHP_EOL, $response->getContent());
         $this->assertNull($response->getHeaders('x-test'));
     }
 }

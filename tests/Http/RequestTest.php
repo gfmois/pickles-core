@@ -20,9 +20,9 @@ class RequestTest extends TestCase
             ->setQueryParams($queryParams)
             ->setMethod(HttpMethod::POST);
 
-        $this->assertEquals($uri, $request->getUri());
-        $this->assertEquals($queryParams, $request->getQueryParams());
-        $this->assertEquals($postData, $request->getData());
-        $this->assertEquals(HttpMethod::POST, $request->getMethod());
+        $this->assertEquals($uri, $request->uri());
+        $this->assertEquals($queryParams, $request->queryParams());
+        $this->assertEquals($postData, $request->data());
+        $this->assertEquals(HttpMethod::POST, $request->method());
     }
 }

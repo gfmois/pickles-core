@@ -246,7 +246,7 @@ class Response
     {
         $this->setStatus($status);
         session()->flash(Constants::ERRORS_KEY, $errors);
-        session()->flash(Constants::OLD_DATA_KEY, request()->getData());
+        session()->flash(Constants::OLD_DATA_KEY, request()->data());
 
         return $this;
     }

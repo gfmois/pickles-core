@@ -277,8 +277,8 @@ class Kernel
      */
     public function prepareNextRequest()
     {
-        if ($this->request->getMethod() === HttpMethod::GET) {
-            $this->session->set(Constants::PREVIOUS_REQUEST_KEY, $this->request->getUri());
+        if ($this->request->method() === HttpMethod::GET) {
+            $this->session->set(Constants::PREVIOUS_REQUEST_KEY, $this->request->uri());
         }
     }
 

@@ -21,11 +21,11 @@ if (!$engine instanceof PicklesEngine) {
 $engine->setViewsDir(__DIR__ . "/../views/");
 
 Route::GET("/test/{param}", function(Request $request) {
-    return json(["result" => $request->getRouteParameters()]);
+    return json(["result" => $request->routeParams()]);
 });
 
 Route::POST("/test", function(Request $request) {
-    return Response::json(["result" => $request->getData()]);
+    return Response::json(["result" => $request->data()]);
 });
 
 Route::GET("/redirect", function(Request $request) {
@@ -45,16 +45,16 @@ Route::DELETE('/test', function(Request $request) {
 });
 
 Route::post('/users/{id}/update', function (Request $request) {
-    $user = User::find($request->getRouteParameters('id'));
+    $user = User::find($request->routeParams('id'));
 
-    $user->name = $request->getData('name');
-    $user->email = $request->getData('email');
+    $user->name = $request->data('name');
+    $user->email = $request->data('email');
     
     return json($user->update()->toArray());
 });
 
 Route::delete('/users/{id}/delete', function (Request $request) {
-    $user = User::find($request->getRouteParameters('id'));
+    $user = User::find($request->routeParams('id'));
 
     return json($user->delete()->toArray());
 });
@@ -147,7 +147,7 @@ class User extends Model {
 
 Route::POST("/users", function (Request $request) {
     return json([
-        "result" => User::create($request->getData())->toArray(),
+        "result" => User::create($request->data())->toArray(),
     ]);
 });
 
@@ -165,7 +165,7 @@ Route::GET("/users/where", function (Request $request) {
 });
 
 Route::GET("/users/{id}", function (Request $request) {
-    $id = $request->getRouteParameters()["id"] ?? null;
+    $id = $request->routeParams()["id"] ?? null;
     return json([
         "result" => User::find($id)?->toArray(),
     ]);

@@ -125,8 +125,8 @@ class Router
      */
     public function resolveRoute(Request $request): Route
     {
-        foreach ($this->routes[$request->getMethod()->value] as $route) {
-            if ($route->matches($request->getUri())) {
+        foreach ($this->routes[$request->method()->value] as $route) {
+            if ($route->matches($request->uri())) {
                 return $route;
             }
         }

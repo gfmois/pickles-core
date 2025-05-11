@@ -4,6 +4,7 @@ namespace Pickles\Http;
 
 use InvalidArgumentException;
 use Pickles\Routing\Route;
+use Pickles\Storage\File;
 use Pickles\Validation\Validator;
 
 /**
@@ -58,25 +59,35 @@ class Request
     protected array $headers = [];
 
     /**
+     * Array that contains the Uploaded files.
+     * @var array<string, File>
+     */
+    protected array $files = [];
+
+    //MARK: Getters
+    /**
+     * Validates the request data against the provided validation rules.
+     *
+     * @param array<string, mixed> $validationRules An associative array of validation rules where the key is the field name
+     *                                and the value is the validation rule(s) to apply.
+     * @param array<string, string> $messages Optional. An associative array of custom error messages where the key is the rule
+     *                        or field name and the value is the custom message.
+     * @return array<string, mixed> An array containing the validation results, including any errors encountered.
+     */
+    public function validate(array $validationRules, array $messages = []): array
+    {
+        $validator = new Validator($this->data);
+        return $validator->validate($validationRules, $messages);
+    }
+
+    /**
      * Get the request URI path.
      *
      * @return string
      */
-    public function getUri(): string
+    public function uri(): string
     {
         return $this->uri;
-    }
-
-    /**
-     * Set request URI.
-     *
-     * @param  string  $uri  The request URI path.
-     * @return self
-     */
-    public function setUri(string $uri): self
-    {
-        $this->uri = $uri;
-        return $this;
     }
 
     /**
@@ -84,21 +95,9 @@ class Request
      *
      * @return HttpMethod
      */
-    public function getMethod(): HttpMethod
+    public function method(): HttpMethod
     {
         return $this->method;
-    }
-
-    /**
-     * Set the HTTP method of the request.
-     *
-     * @param  HttpMethod  $method  The HTTP method of the request.
-     * @return  self
-     */
-    public function setMethod(HttpMethod $method): self
-    {
-        $this->method = $method;
-        return $this;
     }
 
     /**
@@ -112,7 +111,7 @@ class Request
      *
      * @throws InvalidArgumentException If the provided key is not a string.
      */
-    public function getData(?string $key = null)
+    public function data(?string $key = null)
     {
         if (is_null($key)) {
             return $this->data;
@@ -126,25 +125,13 @@ class Request
     }
 
     /**
-     * Set POST data
-     *
-     * @param  array<string, mixed>
-     * @return  self
-     */
-    public function setData(array $data): self
-    {
-        $this->data = $data;
-        return $this;
-    }
-
-    /**
      * Get all query parameters
      *
      * @var string|null $key
      * @return string|string[]|null
      * @throws InvalidArgumentException when `$key` is not null or string
      */
-    public function getQueryParams(?string $key = null): string|array|null
+    public function queryParams(?string $key = null): string|array|null
     {
         if (is_null($key)) {
             return $this->queryParams;
@@ -158,37 +145,13 @@ class Request
     }
 
     /**
-     * Set query parameters.
-     *
-     * @param  array<string, string> $queryParams
-     * @return  self
-     */
-    public function setQueryParams(array $queryParams): self
-    {
-        $this->queryParams = $queryParams;
-        return $this;
-    }
-
-    /**
      * Get route match by URI of this request.
      *
      * @return  Route
      */
-    public function getRoute(): Route
+    public function route(): Route
     {
         return $this->route;
-    }
-
-    /**
-     * Set route for this request.
-     *
-     * @param  Route  $route
-     * @return  self
-     */
-    public function setRoute(Route $route): self
-    {
-        $this->route = $route;
-        return $this;
     }
 
     /**
@@ -198,7 +161,7 @@ class Request
      * @throws InvalidArgumentException when `$key` is not a string
      * @return string|string[]|null
      */
-    public function getRouteParameters(?string $key = null)
+    public function routeParams(?string $key = null)
     {
         $routeParams = $this->route->parseParameters($this->uri);
         if (is_null($key)) {
@@ -218,7 +181,7 @@ class Request
      * @param string|null $key
      * @return  array<string,
      */
-    public function getHeaders(?string $key = null): string|array|null
+    public function headers(?string $key = null): string|array|null
     {
         if (is_null($key)) {
             return $this->headers;
@@ -229,6 +192,78 @@ class Request
         }
 
         return $this->headers[strtolower($key)] ?? null;
+    }
+
+    /**
+     * Retrieves a file from the uploaded files array.
+     *
+     * @param string|null $key The key of the file to retrieve. If null, no specific file is targeted.
+     * @return File|null The file object associated with the given key, or null if the key does not exist.
+     */
+    public function files(?string $key = null): ?File
+    {
+        return $this->files[$key] ?? null;
+    }
+
+    //MARK: Setters
+    /**
+     * Set request URI.
+     *
+     * @param  string  $uri  The request URI path.
+     * @return self
+     */
+    public function setUri(string $uri): self
+    {
+        $this->uri = $uri;
+        return $this;
+    }
+
+    /**
+     * Set the HTTP method of the request.
+     *
+     * @param  HttpMethod  $method  The HTTP method of the request.
+     * @return  self
+     */
+    public function setMethod(HttpMethod $method): self
+    {
+        $this->method = $method;
+        return $this;
+    }
+
+    /**
+     * Set POST data
+     *
+     * @param  array<string, mixed>
+     * @return  self
+     */
+    public function setData(array $data): self
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * Set query parameters.
+     *
+     * @param  array<string, string> $queryParams
+     * @return  self
+     */
+    public function setQueryParams(array $queryParams): self
+    {
+        $this->queryParams = $queryParams;
+        return $this;
+    }
+
+    /**
+     * Set route for this request.
+     *
+     * @param  Route  $route
+     * @return  self
+     */
+    public function setRoute(Route $route): self
+    {
+        $this->route = $route;
+        return $this;
     }
 
     /**
@@ -247,17 +282,14 @@ class Request
     }
 
     /**
-     * Validates the request data against the provided validation rules.
+     * Set uploaded files.
      *
-     * @param array<string, mixed> $validationRules An associative array of validation rules where the key is the field name
-     *                                and the value is the validation rule(s) to apply.
-     * @param array<string, string> $messages Optional. An associative array of custom error messages where the key is the rule
-     *                        or field name and the value is the custom message.
-     * @return array<string, mixed> An array containing the validation results, including any errors encountered.
+     * @param array<string, File> $files
+     * @return self
      */
-    public function validate(array $validationRules, array $messages = []): array
+    public function setFiles(array $files): self
     {
-        $validator = new Validator($this->data);
-        return $validator->validate($validationRules, $messages);
+        $this->files = $files;
+        return $this;
     }
 }

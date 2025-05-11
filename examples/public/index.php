@@ -61,7 +61,7 @@ Route::delete('/users/{id}/delete', function (Request $request) {
 
 class AuthMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
-        if ($request->getHeaders("authorization") != "asdf") {
+        if ($request->headers("authorization") != "asdf") {
             return json(
                 [
                     "message" => "Not Authenticated!",
@@ -79,7 +79,7 @@ class AuthMiddleware implements Middleware {
 
 class TestMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
-        if ($request->getHeaders("authorization") != "asdf") {
+        if ($request->headers("authorization") != "asdf") {
             return json(
                 [
                     "message" => "Not Authenticated!",

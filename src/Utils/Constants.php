@@ -59,7 +59,7 @@ class Constants
     public const MIGRATIONS_TABLE_NAME = "migrations";
 
     /** Config Constants */
-    // VIEW KEYS
+    //MARK: VIEW KEYS
     public const VIEW_ENGINE = "view.engine";
     public const VIEW_PATH = "view.path";
     public const DEFAULT_VIEW_ENGINE = "pickles";
@@ -68,7 +68,7 @@ class Constants
     public const SESSION_STORAGE = "session.storage";
     public const DEFAULT_SESSION_STORAGE = "native";
 
-    // DATABASE KEYS
+    //MARK: DATABASE KEYS
     public const DATABASE_PROTOCOL = "database.connection";
     public const DATABASE_HOST = "database.host";
     public const DATABASE_PORT = "database.port";
@@ -79,7 +79,12 @@ class Constants
     public const POSTGRES_DATABASE_PROTOCOL = "pgsql";
     public const MYSQL_DATABASE_PROTOCOL = "mysql";
 
-    // PROVIDERS KEYS
+    //MARK: PROVIDERS KEYS
     public const BOOT_PROVIDERS = "boot";
     public const RUNTIME_PROVIDERS = "runtime";
+
+    //MARK: AUTHENTICATION
+    public const AUTH_SESSION = "_auth";
+    public const AUTH_METHOD = "auth.method";
+    public const DEFAULT_AUTH_METHOD = "session";
 }

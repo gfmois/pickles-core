@@ -48,6 +48,25 @@ abstract class Model
         return $this->attributes[$name] ?? null;
     }
 
+    /**
+     * Prepares the object for serialization by removing hidden attributes
+     * and returning the list of object properties to serialize.
+     *
+     * This method is typically called when the object is being serialized
+     * (e.g., using `serialize()` function). It ensures that any attributes
+     * specified in the `$hidden` array are excluded from the serialized data.
+     *
+     * @return array An array of property names to be serialized.
+     */
+    public function __sleep()
+    {
+        foreach ($this->hidden as $hide) {
+            unset($this->attributes[$hide]);
+        }
+
+        return array_keys(get_object_vars($this));
+    }
+
     public function __call($method, $args)
     {
         // Check if the method requires a database driver

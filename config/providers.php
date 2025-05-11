@@ -6,6 +6,7 @@ return [
         Pickles\Providers\DatabaseServiceProvider::class,
         Pickles\Providers\SessionStorageServiceProvider::class,
         Pickles\Providers\ViewServiceProvider::class,
+        Pickles\Providers\AuthenticatorServiceProvider::class
     ],
     "runtime" => [
         App\Providers\RuleServiceProvider::class,

@@ -74,4 +74,12 @@ interface DatabaseDriver
      * @return void
      */
     public function delete(array $data): void;
+
+
+    /**
+     * Retrieves the ID of the last inserted row.
+     *
+     * @return int The ID of the last inserted row in the database.
+     */
+    public function lastInsertId(): int;
 }

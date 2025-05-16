@@ -192,4 +192,12 @@ class PdoDriver implements DatabaseDriver
 
         $this->statement($query, array_values($data));
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function lastInsertId(): int
+    {
+        return (int) $this->pdo->lastInsertId();
+    }
 }

@@ -87,4 +87,8 @@ class Constants
     public const AUTH_SESSION = "_auth";
     public const AUTH_METHOD = "auth.method";
     public const DEFAULT_AUTH_METHOD = "session";
+
+    //MARK: HASHING KEYS
+    public const HASH_HASHER = "hash.hasher";
+    public const DEFAULT_HASHER = "bcrypt";
 }

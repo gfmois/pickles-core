@@ -11,7 +11,7 @@ class ViewServiceProvider implements ServiceProvider
     public function registerServices()
     {
         match (config(Constants::VIEW_ENGINE, Constants::DEFAULT_VIEW_ENGINE)) {
-            Constants::DEFAULT_VIEW_ENGINE => singleton(Engine::class, fn () => new PicklesEngine(Constants::VIEW_PATH))
+            Constants::DEFAULT_VIEW_ENGINE => singleton(Engine::class, fn () => new PicklesEngine(config(Constants::VIEW_PATH)))
         };
     }
 }

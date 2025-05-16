@@ -7,3 +7,5 @@ database
 bin
 bin/*
 .env
+docs
+.phpdoc

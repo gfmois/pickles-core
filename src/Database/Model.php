@@ -198,6 +198,9 @@ abstract class Model
         $this->checkTimestamps();
         self::$driver->table($this->table)->insert($this->attributes);
 
+        $id = self::$driver->lastInsertId();
+        $this->attributes[$this->primaryKey] = $id;
+
         return $this;
     }
 

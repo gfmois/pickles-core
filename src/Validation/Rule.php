@@ -6,6 +6,7 @@ use Pickles\Validation\Exceptions\RuleParseException;
 use Pickles\Validation\Exceptions\UnknownRuleException;
 use Pickles\Validation\Rules\Email;
 use Pickles\Validation\Rules\LessThan;
+use Pickles\Validation\Rules\Min;
 use Pickles\Validation\Rules\Number;
 use Pickles\Validation\Rules\Required;
 use Pickles\Validation\Rules\RequiredWhen;
@@ -27,7 +28,8 @@ class Rule
         RequiredWhen::class,
         RequiredWith::class,
         Required::class,
-        Number::class
+        Number::class,
+        Min::class
     ];
 
     /**

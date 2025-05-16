@@ -51,7 +51,6 @@ class PicklesEngine implements Engine
         $this->viewsDir = $viewsDir;
     }
 
-
     /**
      * Renders a view within an optional layout.
      *

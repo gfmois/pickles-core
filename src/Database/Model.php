@@ -6,6 +6,7 @@ use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Exceptions\NoDriverSetException;
 use Pickles\Database\Exceptions\NoFillableAttributesDefinedException;
 use Pickles\Database\Exceptions\NoFillableAttributesProvidedException;
+use Pickles\Database\Exceptions\PicklesDatabaseException;
 use Pickles\Database\Exceptions\PrimaryKeyNotSetException;
 
 abstract class Model
@@ -199,7 +200,11 @@ abstract class Model
         self::$driver->table($this->table)->insert($this->attributes);
 
         $id = self::$driver->lastInsertId();
-        $this->attributes[$this->primaryKey] = $id;
+        if ($id === false) {
+            throw new PicklesDatabaseException("Failed to retrieve the last inserted ID.");
+        }
+
+        $this->__set($this->primaryKey, $id);
 
         return $this;
     }

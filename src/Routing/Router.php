@@ -48,7 +48,7 @@ class Router
      * @param Closure $action The handler to be executed for this route
      * @return Route
      */
-    protected function registerRoute(HttpMethod $method, string $uri, Closure $action): Route
+    protected function registerRoute(HttpMethod $method, string $uri, Closure|array $action): Route
     {
         $route = new Route($uri, $action);
         $this->routes[$method->value][] = $route;
@@ -59,10 +59,10 @@ class Router
      * Registers a GET route.
      *
      * @param string $uri
-     * @param Closure $action
+     * @param Closure|array $action
      * @return Route
      */
-    public function get(string $uri, Closure $action): Route
+    public function get(string $uri, Closure|array $action): Route
     {
         return $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
@@ -71,10 +71,10 @@ class Router
      * Registers a POST route.
      *
      * @param string $uri
-     * @param Closure $action
+     * @param Closure|array $action
      * @return Route
      */
-    public function post(string $uri, Closure $action)
+    public function post(string $uri, Closure|array $action)
     {
         return $this->registerRoute(HttpMethod::POST, $uri, $action);
     }
@@ -83,10 +83,10 @@ class Router
      * Registers a PUT route.
      *
      * @param string $uri
-     * @param Closure $action
+     * @param Closure|array $action
      * @return Route
      */
-    public function put(string $uri, Closure $action)
+    public function put(string $uri, Closure|array $action)
     {
         return $this->registerRoute(HttpMethod::PUT, $uri, $action);
     }
@@ -95,10 +95,10 @@ class Router
      * Registers a PATCH route.
      *
      * @param string $uri
-     * @param Closure $action
+     * @param Closure|array $action
      * @return Route
      */
-    public function patch(string $uri, Closure $action)
+    public function patch(string $uri, Closure|array $action)
     {
         return $this->registerRoute(HttpMethod::PATCH, $uri, $action);
     }
@@ -107,10 +107,10 @@ class Router
      * Registers a DELETE route.
      *
      * @param string $uri
-     * @param Closure $action
+     * @param Closure|array $action
      * @return Route
      */
-    public function delete(string $uri, Closure $action)
+    public function delete(string $uri, Closure|array $action)
     {
         return $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
@@ -146,26 +146,30 @@ class Router
         $route = $this->resolveRoute($request);
         $request->setRoute($route);
         $action = $route->getAction();
-        if (!$action instanceof Closure) {
+        if (!$action instanceof Closure && !is_array($action)) {
             throw new HttpNotFoundException();
         }
 
-        if ($route->hasMiddlewares()) {
-            return $this->execMiddlewares($request, $route->getMiddlewares(), $action);
+        if (is_array($action)) {
+            $controller = new $action[0]();
+            $action[0] = $controller;
         }
 
-        $response = $action($request);
-        return $response;
+        return $this->execMiddlewares(
+            $request,
+            $route->getMiddlewares(),
+            fn () => call_user_func($action, $request)
+        );
     }
 
     /**
      * Executes all middlewares before launch the handler
      *
      * @param Middleware[] $middlewares
-     * @param \Closure $target
+     * @param \Closure|array $target
      * @return Response
      */
-    protected function execMiddlewares(Request $request, array $middlewares, Closure $target): Response
+    protected function execMiddlewares(Request $request, array $middlewares, Closure|array $target): Response
     {
         if (count($middlewares) == 0) {
             return $target($request);

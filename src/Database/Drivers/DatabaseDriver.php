@@ -79,7 +79,7 @@ interface DatabaseDriver
     /**
      * Retrieves the ID of the last inserted row.
      *
-     * @return int The ID of the last inserted row in the database.
+     * @return int|false The ID of the last inserted row in the database or false on failure.
      */
-    public function lastInsertId(): int;
+    public function lastInsertId(): int|false;
 }

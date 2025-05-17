@@ -25,9 +25,9 @@ class Route
     /**
      * The action (handler) to execute when the route matches.
      *
-     * @var Closure
+     * @var Closure|array
      */
-    protected Closure $action;
+    protected Closure|array $action;
 
     /**
      * Regular expression derived from the URI pattern.
@@ -53,9 +53,9 @@ class Route
      * Constructor.
      *
      * @param string $uri The route URI definition, possibly with parameters.
-     * @param Closure $action The handler to be executed for this route.
+     * @param Closure|array $action The handler to be executed for this route.
      */
-    public function __construct(string $uri, Closure $action)
+    public function __construct(string $uri, Closure|array $action)
     {
         $this->uri = $uri;
         $this->action = $action;
@@ -77,7 +77,7 @@ class Route
     /**
      * Get the handler associated with this route.
      *
-     * @return Closure
+     * @return Closure|array
      */
     public function getAction()
     {
@@ -121,11 +121,11 @@ class Route
      * Registers a GET route with the application's router.
      *
      * @param string $uri The URI pattern for the route.
-     * @param Closure $action The action to be executed when the route is matched.
+     * @param Closure|array $action The action to be executed when the route is matched.
      * @return self Returns the current instance of the route.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function get(string $uri, Closure $action): self
+    public static function get(string $uri, Closure|array $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -139,11 +139,11 @@ class Route
      * Registers a POST route with the specified URI and action.
      *
      * @param string $uri The URI pattern for the route.
-     * @param Closure $action The action to be executed when the route is matched.
+     * @param Closure|array $action The action to be executed when the route is matched.
      * @return self Returns the current instance of the route for method chaining.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function post(string $uri, Closure $action): self
+    public static function post(string $uri, Closure|array $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -157,11 +157,11 @@ class Route
      * Registers a new route that responds to HTTP PUT requests.
      *
      * @param string $uri The URI pattern for the route.
-     * @param Closure $action The action to be executed when the route is matched.
+     * @param Closure|array $action The action to be executed when the route is matched.
      * @return self Returns the current instance of the route for method chaining.
      * @throws RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function put(string $uri, Closure $action): self
+    public static function put(string $uri, Closure|array $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -175,13 +175,13 @@ class Route
      * Registers a new PATCH route with the application's router.
      *
      * @param string $uri The URI pattern for the route.
-     * @param \Closure $action The action to be executed when the route is matched.
+     * @param \Closure|array $action The action to be executed when the route is matched.
      *
      * @throws \RuntimeException If the Kernel instance is not found in the container.
      *
      * @return self Returns the current instance for method chaining.
      */
-    public static function patch(string $uri, Closure $action): self
+    public static function patch(string $uri, Closure|array $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {
@@ -195,11 +195,11 @@ class Route
      * Registers a DELETE route with the specified URI and action.
      *
      * @param string $uri The URI pattern for the route.
-     * @param \Closure $action The action to be executed when the route is matched.
+     * @param \Closure|array $action The action to be executed when the route is matched.
      * @return self Returns the current instance of the route.
      * @throws \RuntimeException If the Kernel instance is not found in the container.
      */
-    public static function delete(string $uri, Closure $action): self
+    public static function delete(string $uri, Closure|array $action): self
     {
         $kernel = app();
         if (!$kernel instanceof Kernel) {

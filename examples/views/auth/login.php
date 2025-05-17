@@ -1,4 +1,3 @@
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <form method="post" class="max-w-md mx-auto bg-white p-8 rounded shadow">
     <div class="mb-4">
         <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>

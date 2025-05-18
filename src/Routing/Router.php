@@ -3,6 +3,7 @@
 namespace Pickles\Routing;
 
 use Closure;
+use Pickles\Container\DependencyInjection;
 use Pickles\Http\Middleware;
 use Pickles\Http\HttpMethod;
 use Pickles\Http\Exceptions\HttpNotFoundException;
@@ -155,10 +156,12 @@ class Router
             $action[0] = $controller;
         }
 
+        $params = DependencyInjection::resolveParameters($action, $request->routeParams());
+
         return $this->execMiddlewares(
             $request,
             $route->getMiddlewares(),
-            fn () => call_user_func($action, $request)
+            fn () => call_user_func($action, ...$params)
         );
     }
 

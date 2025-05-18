@@ -28,7 +28,7 @@ class RegisterController extends Controller
         return redirect("/");
     }
 
-    public function view(Request $request)
+    public function view()
     {
         return view("auth/register");
     }

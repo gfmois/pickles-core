@@ -1,5 +1,5 @@
 {
-    "name": "gfmois/pickles-framework",
+    "name": "gfmois/pickles-core",
     "description": "Simple PHP Framework inspired by Laravel",
     "type": "library",
     "license": "MIT",

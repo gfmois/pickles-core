@@ -156,7 +156,10 @@ class Router
             $action[0] = $controller;
         }
 
-        $params = DependencyInjection::resolveParameters($action, $request->routeParams());
+        $params = DependencyInjection::resolveParameters(
+            $action,
+            $request->routeParams()
+        );
 
         return $this->execMiddlewares(
             $request,

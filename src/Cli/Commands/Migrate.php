@@ -8,6 +8,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Handles database migration commands for the CLI.
+ *
+ * This command provides functionality to manage and execute database migrations
+ * within the Pickles Framework. It extends the base Command class to integrate
+ * with the CLI command system.
+ */
 class Migrate extends Command
 {
     protected static $defaultName = 'migrate';

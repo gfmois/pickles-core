@@ -8,6 +8,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command class responsible for generating new migration files.
+ *
+ * This class provides the functionality to create migration files
+ * via the CLI, allowing developers to manage database schema changes.
+ *
+ * @package PicklesFramework\Cli\Commands
+ */
 class MakeMigration extends Command
 {
     protected static $defaultName = 'make:migration';

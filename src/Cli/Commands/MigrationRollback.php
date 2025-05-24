@@ -7,9 +7,16 @@ use Pickles\Database\Migrations\Migrator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Handles the rollback of database migrations via the CLI.
+ *
+ * This command allows users to revert the most recent migration or a specified number of migrations.
+ * It is typically used to undo changes made by previous migration commands.
+ *
+ * @package PicklesFramework\Cli\Commands
+ */
 class MigrationRollback extends Command
 {
     protected static $defaultName = 'migration:rollback';

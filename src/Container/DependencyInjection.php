@@ -10,8 +10,21 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 
+/**
+ * Class DependencyInjection
+ *
+ * Handles dependency injection for the application, managing the instantiation
+ * and resolution of class dependencies within the container.
+ */
 class DependencyInjection
 {
+    /**
+     * Resolves and injects parameters for the given callback or closure, using the provided route parameters.
+     *
+     * @param Closure|array $callback The callback or closure whose parameters need to be resolved.
+     * @param array $routeParameters Optional. An associative array of parameters to be injected into the callback.
+     * @return array The resolved parameters ready to be passed to the callback.
+     */
     public static function resolveParameters(Closure|array $callback, array $routeParameters = [])
     {
         if (!$callback instanceof Closure && !is_array($callback)) {
@@ -54,6 +67,13 @@ class DependencyInjection
         return $params;
     }
 
+    /**
+     * Resolves and returns an instance of the specified model class.
+     *
+     * @param string $className The fully qualified class name of the model to resolve.
+     * @param array $routeParameters Optional route parameters to be passed to the model constructor or resolver.
+     * @return Model The resolved model instance.
+     */
     public static function resolveModel(string $className, array $routeParameters = []): Model
     {
         $modelClass = new ReflectionClass($className);

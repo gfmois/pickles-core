@@ -14,7 +14,7 @@ class Serve extends Command
 
     protected static $defaultDescription = "Run Lune development application";
 
-      public function __construct()
+    public function __construct()
     {
         parent::__construct('serve');
     }

@@ -7,6 +7,7 @@ use Dotenv\Dotenv;
 use Pickles\Cli\Commands\MakeMigration;
 use Pickles\Cli\Commands\Migrate;
 use Pickles\Cli\Commands\MigrationRollback;
+use Pickles\Cli\Commands\Serve;
 use Pickles\Config\Config;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Database\Migrations\Migrator;
@@ -94,6 +95,7 @@ class Cli
             new MakeMigration(),
             new Migrate(),
             new MigrationRollback(),
+            new Serve()
         ]);
 
         $cli->run();

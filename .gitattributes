@@ -2,3 +2,5 @@
 .php-cs-fixer.php export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
+/.githooks export-ignore
+setup-git.sh export-ignore

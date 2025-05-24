@@ -8,6 +8,11 @@
  */
 class Constants
 {
+    //MARK: APP KEYS
+    public const APP_NAME = "app.name";
+    public const APP_VERSION = "app.version";
+
+    //MARK: SESSION KEYS
     /**
      * Key used to store flash messages in the session.
      * @var string
@@ -82,6 +87,7 @@ class Constants
     //MARK: PROVIDERS KEYS
     public const BOOT_PROVIDERS = "boot";
     public const RUNTIME_PROVIDERS = "runtime";
+    public const CLI_PROVIDERS = "cli";
 
     //MARK: AUTHENTICATION
     public const AUTH_SESSION = "_auth";

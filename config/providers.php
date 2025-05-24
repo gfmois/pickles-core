@@ -13,4 +13,8 @@ return [
         App\Providers\RuleServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     ],
+
+    'cli' => [
+        Pickles\Providers\DatabaseServiceProvider::class,
+    ]
 ];

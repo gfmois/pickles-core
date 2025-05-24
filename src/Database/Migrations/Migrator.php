@@ -6,6 +6,7 @@ use Constants;
 use Pickles\Database\Drivers\DatabaseDriver;
 use Pickles\Utils\FileUtils;
 use RuntimeException;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * The Migrator class is responsible for handling database migrations.
@@ -16,6 +17,8 @@ use RuntimeException;
  */
 class Migrator
 {
+    private ConsoleOutput $output;
+
     public function __construct(
         private string $migrationsDir,
         private string $templateDir,
@@ -26,6 +29,7 @@ class Migrator
         $this->templateDir = $templateDir;
         $this->databaseDriver = $databaseDriver;
         $this->logProgress = $logProgress;
+        $this->output = new ConsoleOutput();
 
         FileUtils::ensureDirectoryExists($this->migrationsDir);
     }
@@ -56,7 +60,7 @@ class Migrator
         $migrations = $this->getAllMigrations();
 
         if (count($migrated) >= count($migrations)) {
-            $this->log("Nothing to migrate");
+            $this->log("Nothing to migrate", LogType::COMMENT);
             return;
         }
 
@@ -64,7 +68,7 @@ class Migrator
         foreach ($cleanMigrations as $migrationFile) {
             $migration = require $migrationFile;
             if (!$migration instanceof Migration) {
-                $this->log("Invalid migration file: $migrationFile");
+                $this->log("Invalid migration file: $migrationFile", LogType::ERROR);
                 continue;
             }
 
@@ -90,7 +94,7 @@ class Migrator
         $pendingCount = count($migrated);
 
         if ($pendingCount === 0) {
-            $this->log("Nothing to rollback");
+            $this->log("Nothing to rollback", LogType::COMMENT);
             return;
         }
 
@@ -104,7 +108,7 @@ class Migrator
         foreach ($migrations as $migrationFile) {
             $migration = require $migrationFile;
             if (!$migration instanceof Migration) {
-                $this->log("Invalid migration file: $migrationFile");
+                $this->log("Invalid migration file: $migrationFile", LogType::ERROR);
                 continue;
             }
 
@@ -252,10 +256,18 @@ class Migrator
      * @param string $message The message to be logged.
      * @return void
      */
-    private function log(string $message): void
+    private function log(string $message, LogType $logType = LogType::INFO): void
     {
         if ($this->logProgress) {
-            printf("%s\n", $message);
+            $this->output->writeln("<$logType->value>$message</$logType->value>");
         }
     }
+}
+
+enum LogType: string
+{
+    case INFO = 'info';
+    case ERROR = 'error';
+    case COMMENT = 'comment';
+    case QUESTION = 'question';
 }
